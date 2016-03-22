@@ -1,4 +1,4 @@
-package se.threegorillas.datasource.model;
+package se.threegorillas.model;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

@@ -1,4 +1,4 @@
-package se.threegorillas.datasource.model;
+package se.threegorillas.model;
 
 import java.util.Collection;
 import java.util.TreeSet;
