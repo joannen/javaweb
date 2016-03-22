@@ -1,8 +1,8 @@
 package se.threegorillas.appconfig;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -13,12 +13,12 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories("se.threegorillas.datasource.repository")
+@EnableJpaRepositories("se.threegorillas.repository")
     public class AppConfig {
 
     @Bean
@@ -27,7 +27,7 @@ import com.zaxxer.hikari.HikariDataSource;
         config.setDriverClassName("com.mysql.jdbc.Driver");
         config.setJdbcUrl("jdbc:mysql://localhost/datasource");
         config.setUsername("root");
-        config.setPassword("hannele1");
+        config.setPassword("password");
 
         return new HikariDataSource(config);
     }
@@ -53,7 +53,7 @@ import com.zaxxer.hikari.HikariDataSource;
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(dataSource());
         factory.setJpaVendorAdapter(jpaVendorAdapter());
-        factory.setPackagesToScan("se.threegorillas.datasource.model");
+        factory.setPackagesToScan("se.threegorillas.model");
 
         return factory;
     }

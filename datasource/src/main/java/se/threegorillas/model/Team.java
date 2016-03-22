@@ -1,12 +1,15 @@
 package se.threegorillas.model;
 
+import se.threegorillas.status.Status;
+
 import java.util.Collection;
 import java.util.HashSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.transaction.Status;
+
+
 
 @Entity
 public class Team extends AbstractEntity {
@@ -25,7 +28,7 @@ public class Team extends AbstractEntity {
 
 	public Team(String teamName) {
 		this.teamName = teamName;
-		this.teamStatus = Status.STATUS_ACTIVE;
+		this.teamStatus = Status.ACTIVE;
 		users = new HashSet();
 	}
 

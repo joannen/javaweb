@@ -3,6 +3,7 @@ package se.threegorillas;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import se.threegorillas.model.User;
 import se.threegorillas.repository.UserRepository;
+import se.threegorillas.service.DataBaseService;
 
 public final class Runner {
     public static void main(String[] args) {
@@ -10,13 +11,15 @@ public final class Runner {
             context.scan("se.threegorillas");
             context.refresh();
 
-            UserRepository repo = context.getBean(UserRepository.class);
+            DataBaseService dataBaseService = context.getBean(DataBaseService.class);
 
             User user = new User("fredrik", "Fredrik", "Hollinger", "watawt", "132345");
 
-            User saved = repo.save(user);
+            User saved = dataBaseService.saveUser(user);
 
-            System.out.println(saved == null);
+            User a = dataBaseService.findById(user.getId());
+
+            System.out.println(a);
 
         }
     }

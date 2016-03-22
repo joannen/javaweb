@@ -6,5 +6,6 @@
   <packaging>pom</packaging>
   <modules>
   	<module>datasource</module>
+    <module>web</module>
   </modules>
 </project>
