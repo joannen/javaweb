@@ -16,7 +16,7 @@ public class Team extends AbstractEntity {
 
 
 	@Column(nullable = false)
-	private String teamNameSDFGHJKL;
+	private String teamName;
 
 	@Column
 	private String teamStatus;

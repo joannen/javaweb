@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>web</artifactId>
+    <packaging>war</packaging>
     <properties>
         <commons.lang.version>3.4</commons.lang.version>
         <jersey.version>2.22.2</jersey.version>
@@ -23,6 +24,7 @@
     </properties>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
