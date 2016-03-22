@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c8652747-6c72-40a0-a830-f0fc8d3e6463" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datasource/datasource.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/web.iml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datasource/src/main/java/se/threegorillas/model/Team.java" afterPath="$PROJECT_DIR$/datasource/src/main/java/se/threegorillas/model/Team.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="javaweb.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -278,6 +276,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="threegorillas" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="javaweb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="javaweb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datasource" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
