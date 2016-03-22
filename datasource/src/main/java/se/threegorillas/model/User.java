@@ -1,5 +1,7 @@
 package se.threegorillas.model;
 
+import se.threegorillas.status.Status;
+
 import java.util.Collection;
 import java.util.TreeSet;
 
@@ -7,7 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.transaction.Status;
 
 @Entity
 public class User extends AbstractEntity {
@@ -45,7 +46,7 @@ public class User extends AbstractEntity {
 		this.lastName = lastname;
 		this.password = password;
 		this.workItems = new TreeSet();
-		this.userStatus = Status.Active;
+		this.userStatus = Status.ACTIVE;
 		this.userNumber = userNumber;
 	}
 
@@ -88,7 +89,7 @@ public class User extends AbstractEntity {
 	public void setStatusInactive() {
 		makeAllWorkItemsUnstarted();
 
-		this.userStatus = Status.Inactive;
+		this.userStatus = Status.INACTIVE;
 	}
 
 	private void makeAllWorkItemsUnstarted() {
