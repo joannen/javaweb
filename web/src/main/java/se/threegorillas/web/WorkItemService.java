@@ -64,7 +64,7 @@ public class WorkItemService {
         }
 
         URI location = uriInfo.getAbsolutePathBuilder().path(WebWorkItem.class, "getOneWorkItem").build(saved.getId());
-        
+
         return Response.created(location).build();
     }
 }
