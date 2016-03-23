@@ -1,4 +1,4 @@
-package se.threegorillas.provider.webuserparser;
+package se.threegorillas.provider.webparser;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
