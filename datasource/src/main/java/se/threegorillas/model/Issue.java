@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 @Entity
 public class Issue extends AbstractEntity {
 
-    @Column(nullable = false)
     private String issueDescription;
 
     protected Issue() {}

@@ -13,7 +13,7 @@ public class WorkItem extends AbstractEntity {
     @Column(nullable = false)
     private String status;
 
-    @Embedded
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Issue issue;
 
     @ManyToOne
@@ -24,7 +24,6 @@ public class WorkItem extends AbstractEntity {
     public WorkItem(String description){
         this.description = description;
         this.status = Status.UNSTARTED;
-        this.issue = new Issue();
     }
 
     public String getDescription() {
