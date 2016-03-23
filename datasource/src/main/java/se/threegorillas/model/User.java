@@ -50,6 +50,17 @@ public class User extends AbstractEntity {
 		this.userNumber = userNumber;
 	}
 
+	public User(Long id, String username, String firstname, String lastname, String password, String userNumber) {
+		this.id = id;
+		this.userName = username;
+		this.firstName = firstname;
+		this.lastName = lastname;
+		this.password = password;
+		this.workItems = new TreeSet();
+		this.userStatus = Status.ACTIVE;
+		this.userNumber = userNumber;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}

@@ -61,4 +61,14 @@ public final class UserService {
         URI location = uriInfo.getAbsolutePathBuilder().path(savedUser.getId().toString()).build();
         return Response.created(location).build();
     }
+
+    @PUT
+    @Path("{id}")
+    public Response updateUser(@PathParam("id") Long id, WebUser webUser){
+        User u = new User(webUser.getId(), webUser.getUsername(), webUser.getFirstName(), webUser.getLastName(), webUser.getPassword(), webUser.getUserNumber());
+        service.saveUser(u);
+
+        return Response.noContent().build();
+    }
+
 }
