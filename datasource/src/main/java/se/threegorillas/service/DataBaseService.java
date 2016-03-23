@@ -42,4 +42,9 @@ public class DataBaseService {
     public WorkItem save(WorkItem workItem) {
         return workItemRepository.save(workItem);
     }
+
+    public WorkItem findWorkItemById(Long id) {
+        return workItemRepository.findOne(id);
+    }
+
 }
