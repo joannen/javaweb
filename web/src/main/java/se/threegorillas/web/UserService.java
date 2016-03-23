@@ -37,7 +37,7 @@ public final class UserService {
     @GET
     @Path("{id}")
     public WebUser getUser(@PathParam("id") Long id){
-       User user = service.findById(id);
+       User user = service.findUserById(id);
        WebUser webUser = new WebUser(user.getId(), user.getFirstName(), user.getLastName(),
                 user.getUserName(), user.getPassword(), user.getUserNumber());
         return webUser;

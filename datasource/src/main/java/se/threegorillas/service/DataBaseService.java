@@ -2,6 +2,7 @@ package se.threegorillas.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
 import se.threegorillas.model.WorkItem;
 import se.threegorillas.repository.TeamRepository;
@@ -27,11 +28,12 @@ public class DataBaseService {
         this.workItemRepository = workItemRepository;
     }
 
+    //User
     public User saveUser(User user){
         return userRepository.save(user);
     }
 
-    public User findById(Long id){
+    public User findUserById(Long id){
         return userRepository.findOne(id);
     }
 
@@ -39,6 +41,7 @@ public class DataBaseService {
         return userRepository.findAll();
     }
 
+    //WorkItem
     public WorkItem save(WorkItem workItem) {
         return workItemRepository.save(workItem);
     }
@@ -47,5 +50,15 @@ public class DataBaseService {
         return workItemRepository.findOne(id);
     }
 
+<<<<<<< HEAD
     
+=======
+    //Team
+    public Team saveTeam(Team team){ return teamRepository.save(team);}
+
+    public Team findTeamById(Long id){ return teamRepository.findOne(id); }
+
+    public Collection<Team> getAllTeams(){return teamRepository.findAll();}
+
+>>>>>>> master
 }
