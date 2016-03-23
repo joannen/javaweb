@@ -1,6 +1,8 @@
 package se.threegorillas.web;
 
+import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
+import se.threegorillas.provider.WebTeam;
 import se.threegorillas.provider.WebUser;
 import se.threegorillas.service.DataBaseService;
 
@@ -37,8 +39,10 @@ public final class UserService {
     @GET
     @Path("{id}")
     public WebUser getUser(@PathParam("id") Long id){
-       User user = service.findUserById(id);
-       WebUser webUser = new WebUser(user.getId(), user.getFirstName(), user.getLastName(),
+        User user = service.findUserById(id);
+
+
+        WebUser webUser = new WebUser(user.getId(), user.getFirstName(), user.getLastName(),
                 user.getUserName(), user.getPassword(), user.getUserNumber());
         return webUser;
 
