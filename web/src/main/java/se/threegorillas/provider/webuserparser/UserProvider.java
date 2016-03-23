@@ -56,18 +56,26 @@ public final class UserProvider implements MessageBodyReader<WebUser>, MessageBo
         @Override
         public WebUser deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject userJson = jsonElement.getAsJsonObject();
+            Long id = userJson.get("id").getAsLong();
+            String firstName = userJson.get("firstName").getAsString();
+            String lastName = userJson.get("lastName").getAsString();
             String username = userJson.get("username").getAsString();
             String password = userJson.get("password").getAsString();
+            String userNumber = userJson.get("userNumber").getAsString();
 
-            return new WebUser(username, password);
+            return new WebUser(id, firstName,lastName,username, password, userNumber);
         }
 
         @Override
         public JsonElement serialize(WebUser webUser, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject json = new JsonObject();
 
+            json.addProperty("id",webUser.getId());
+            json.addProperty("firstName", webUser.getFirstName());
+            json.addProperty("lastName", webUser.getLastName());
             json.addProperty("username", webUser.getUsername());
             json.addProperty("password", webUser.getPassword());
+            json.addProperty("userNumber", webUser.getUserNumber());
 
             return json;
         }
