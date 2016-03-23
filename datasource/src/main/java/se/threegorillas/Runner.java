@@ -6,6 +6,9 @@ import se.threegorillas.model.WorkItem;
 import se.threegorillas.repository.UserRepository;
 import se.threegorillas.service.DataBaseService;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public final class Runner {
 
     public static void main(String[] args) {
@@ -17,7 +20,8 @@ public final class Runner {
 
             WorkItem workItem = new WorkItem("do it!");
 
-            System.out.println(dataBaseService.save(workItem));
+            Collection<WorkItem> workItemCollection = new ArrayList<WorkItem>();
+            System.out.println(workItemCollection.getClass());
 
         }
     }

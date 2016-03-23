@@ -27,7 +27,7 @@ import javax.sql.DataSource;
         config.setDriverClassName("com.mysql.jdbc.Driver");
         config.setJdbcUrl("jdbc:mysql://localhost/datasource");
         config.setUsername("root");
-        config.setPassword("password");
+        config.setPassword("root");
 
         return new HikariDataSource(config);
     }
