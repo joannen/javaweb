@@ -20,6 +20,7 @@ public final class WebUser {
         this.username = username;
         this.password = password;
         this.userNumber = userNumber;
+
     }
 
     public String getUsername() {

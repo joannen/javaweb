@@ -50,4 +50,14 @@ public class TeamService extends AbstractService {
 
         return webTeam;
     }
+
+    @PUT
+    @Path("{id}")
+    public Response updateTeam(@PathParam("id") Long id, WebTeam team){
+        Team t = new Team(team.getId(), team.getTeamName(), team.getTeamStatus());
+        service.saveTeam(t);
+
+        return Response.noContent().build();
+
+    }
 }
