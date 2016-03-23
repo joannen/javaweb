@@ -1,8 +1,12 @@
 package se.threegorillas.web;
 
 import se.threegorillas.provider.WebUser;
+import se.threegorillas.service.DataBaseService;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -14,20 +18,27 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public final class UserService {
 
-//    @Context
-//    private ServletContext context;
-//    private DataBaseService service= (DataBaseService) context.getAttribute("database");
+    @Context
+    private ServletContext context;
+
+    private DataBaseService service;
+
+    @PostConstruct
+    public void setupService() {
+        service = (DataBaseService) context.getAttribute("database");
+    }
 
     @GET
     @Path("/sample")
     public Response sampleUser() {
-        return Response.ok(new WebUser("example", "example")).build();
+
+        
+
+        return Response.ok(service.toString()).build();
     }
 
     @POST
     public Response createUser(WebUser user){
-
-        System.out.println(user);
 
         return Response.ok(user).build();
     }
