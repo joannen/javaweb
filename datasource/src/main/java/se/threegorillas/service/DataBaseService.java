@@ -1,5 +1,6 @@
 package se.threegorillas.service;
 
+import com.sun.tools.javac.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.threegorillas.model.User;
@@ -47,4 +48,11 @@ public class DataBaseService {
         return workItemRepository.findOne(id);
     }
 
+    public boolean workItemExists(WorkItem workItem) {
+        return workItemRepository.findOne(workItem.getId()) != null;
+    }
+
+    public Collection<WorkItem> getAllWorkItems() {
+        return workItemRepository.findAll();
+    }
 }

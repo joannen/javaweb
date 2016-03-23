@@ -16,9 +16,9 @@ public abstract class AbstractService {
     private ServletContext context;
 
     @Context
-    private UriInfo uriInfo;
+    protected UriInfo uriInfo;
 
-    private DataBaseService service;
+    protected DataBaseService service;
 
     @PostConstruct
     public void setupService() {
