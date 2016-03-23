@@ -1,6 +1,5 @@
 package se.threegorillas.service;
 
-import com.sun.tools.javac.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.threegorillas.model.User;

@@ -15,7 +15,7 @@ import javax.ws.rs.core.Context;
  */
 
 @ApplicationPath("/*")
-public class Loader extends Application{
+public final class Loader extends Application{
 
     private AnnotationConfigApplicationContext context;
 

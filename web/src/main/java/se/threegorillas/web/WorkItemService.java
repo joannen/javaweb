@@ -1,28 +1,21 @@
 package se.threegorillas.web;
 
-import com.sun.org.apache.regexp.internal.RESyntaxException;
-import com.sun.tools.javac.util.List;
 import se.threegorillas.model.WorkItem;
 import se.threegorillas.provider.WebWorkItem;
-import se.threegorillas.service.DataBaseService;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 @Path("/workitem")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class WorkItemService extends AbstractService {
+public final class WorkItemService extends AbstractService {
 
     @GET
     @Path("/sample")
@@ -34,9 +27,13 @@ public class WorkItemService extends AbstractService {
 
     @GET
     public Response allWorkItems() {
-        Collection<WorkItem> workItems = service.getAllWorkItems();
+        List<WorkItem> workItems = (List) service.getAllWorkItems();
 
-        return Response.ok(workItems).build();
+        List<WebWorkItem> webWorkItems = new ArrayList<>();
+        workItems.forEach(w -> webWorkItems.add(new WebWorkItem(w.getId(), w.getDescription())));
+        GenericEntity<Collection<WebWorkItem>> entity = new GenericEntity<Collection<WebWorkItem>>(webWorkItems){};
+
+        return Response.ok(entity).build();
     }
 
     @GET
