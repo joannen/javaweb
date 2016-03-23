@@ -59,19 +59,13 @@ public final class WorkItemProvider implements MessageBodyReader<WebWorkItem>, M
 
             return new WebWorkItem(id, description);
         }
-    }
 
-    @Override
-    public JsonElement serialize(WebUser webUser, Type type, JsonSerializationContext jsonSerializationContext) {
-        JsonObject json = new JsonObject();
 
-        json.addProperty("id",webUser.getId());
-        json.addProperty("firstName", webUser.getFirstName());
-        json.addProperty("lastName", webUser.getLastName());
-        json.addProperty("username", webUser.getUsername());
-        json.addProperty("password", webUser.getPassword());
-        json.addProperty("userNumber", webUser.getUserNumber());
+        public JsonElement serialize(WebWorkItem webWorkItem, Type type, JsonSerializationContext jsonSerializationContext) {
+            JsonObject json = new JsonObject();
 
-        return json;
+            json.addProperty("id", webWorkItem.getId());
+            return json;
+        }
     }
 }
