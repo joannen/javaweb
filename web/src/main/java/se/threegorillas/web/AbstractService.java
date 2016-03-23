@@ -13,12 +13,12 @@ import javax.ws.rs.core.UriInfo;
 public abstract class AbstractService {
 
     @Context
-    private ServletContext context;
+    protected ServletContext context;
 
     @Context
-    private UriInfo uriInfo;
+    protected UriInfo uriInfo;
 
-    private DataBaseService service;
+    protected DataBaseService service;
 
     @PostConstruct
     public void setupService() {

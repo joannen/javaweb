@@ -12,7 +12,6 @@ import javax.persistence.OneToMany;
 @Entity
 public class Team extends AbstractEntity {
 
-
 	@Column(nullable = false)
 	private String teamName;
 
@@ -31,6 +30,13 @@ public class Team extends AbstractEntity {
 		users = new HashSet();
 	}
 
+	public Team(Long id, String teamName, String status) {
+		this.id = id;
+		this.teamName = teamName;
+		this.teamStatus = status;
+		users = new HashSet();
+	}
+
 	public String getTeamName() {
 		return teamName;
 	}
@@ -42,5 +48,7 @@ public class Team extends AbstractEntity {
 	public void setTeamName(String teamName){
 		this.teamName = teamName;
 	}
+
+	public String getTeamStatus(){ return teamStatus; }
 
 }

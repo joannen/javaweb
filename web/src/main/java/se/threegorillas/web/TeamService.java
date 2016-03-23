@@ -1,18 +1,17 @@
 package se.threegorillas.web;
 
+import se.threegorillas.model.Team;
 import se.threegorillas.provider.WebTeam;
 import se.threegorillas.service.DataBaseService;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 
 /**
  * Created by TheYellowBelliedMarmot on 2016-03-23.
@@ -20,20 +19,18 @@ import javax.ws.rs.core.UriInfo;
 @Path("/team")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class TeamService extends AbstractService{
+public class TeamService extends AbstractService {
 
-//    @Context
-//    private ServletContext context;
-//
-//    @Context
-//    private UriInfo uriInfo;
-//
-//    private DataBaseService service;
-//
-//    @PostConstruct
-//    public void setUp(){
-//        service = (DataBaseService) context.getAttribute("database");
-//    }
+    @POST
+    public Response createTeam(WebTeam webTeam){
+        Team team = new Team(webTeam.getTeamName());
+
+        Team saveTeam = service.saveTeam(team);
+
+        URI location = uriInfo.getAbsolutePathBuilder().path(saveTeam.getId().toString()).build();
+
+        return Response.created(location).build();
+    }
 
     @GET
     @Path("/sample")
@@ -42,5 +39,15 @@ public class TeamService extends AbstractService{
         WebTeam sampleTeam = new WebTeam(1L, "MasterTeam", "Active");
 
         return Response.ok(sampleTeam).build();
+    }
+
+    @GET
+    @Path("{id}")
+    public WebTeam getTeam(@PathParam("id") Long id){
+
+        Team team = service.findTeamById(id);
+        WebTeam webTeam = new WebTeam(team.getId(), team.getTeamName(), team.getTeamStatus());
+
+        return webTeam;
     }
 }
