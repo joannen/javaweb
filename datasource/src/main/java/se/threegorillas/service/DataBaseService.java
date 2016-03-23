@@ -50,9 +50,6 @@ public class DataBaseService {
         return workItemRepository.findOne(id);
     }
 
-<<<<<<< HEAD
-    
-=======
     //Team
     public Team saveTeam(Team team){ return teamRepository.save(team);}
 
@@ -60,5 +57,12 @@ public class DataBaseService {
 
     public Collection<Team> getAllTeams(){return teamRepository.findAll();}
 
->>>>>>> master
+    public boolean workItemExists(WorkItem workItem) {
+        return workItemRepository.findOne(workItem.getId()) != null;
+    }
+
+    public Collection<WorkItem> getAllWorkItems() {
+        return workItemRepository.findAll();
+    }
+
 }
