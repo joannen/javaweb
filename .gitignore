@@ -5,5 +5,7 @@ target
 */target
 .idea/
 datasource/src/main/java/se/threegorillas/appconfig/AppConfig.java
-
+*/*/*.iml
+*/*.iml
+*.iml
 
