@@ -12,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by TheYellowBelliedMarmot on 2016-03-23.
@@ -49,6 +51,15 @@ public class TeamService extends AbstractService {
         WebTeam webTeam = new WebTeam(team.getId(), team.getTeamName(), team.getTeamStatus());
 
         return webTeam;
+    }
+
+    @GET
+    public Collection<WebTeam> getTeams(){
+        Collection<Team> teams = service.getAllTeams();
+        Collection<WebTeam> webTeams = new ArrayList<>();
+        teams.forEach(team -> webTeams.add(new WebTeam(team.getId(), team.getTeamName(), team.getTeamStatus())));
+
+        return webTeams;
     }
 
     @PUT

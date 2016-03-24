@@ -51,4 +51,33 @@ public class Team extends AbstractEntity {
 
 	public String getTeamStatus(){ return teamStatus; }
 
+	public Team addUser(User user){
+        user.addTeam(this);
+        this.users.add(user);
+        return this;
+    }
+
+    public void clearUsers(){
+        this.users.clear();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Team team = (Team) o;
+
+        return teamName != null ? teamName.equals(team.teamName) : team.teamName == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return teamName != null ? teamName.hashCode() : 0;
+    }
+
+    @Override
+    public String toString(){
+        return this.getTeamName();
+    }
 }

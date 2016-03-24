@@ -31,4 +31,13 @@ public class WebTeam {
     public Long getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "WebTeam{" +
+                "id=" + id +
+                ", teamName='" + teamName + '\'' +
+                ", teamStatus='" + teamStatus + '\'' +
+                '}';
+    }
 }
