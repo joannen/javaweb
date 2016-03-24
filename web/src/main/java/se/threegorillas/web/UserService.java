@@ -14,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by joanne on 22/03/16.
@@ -45,6 +47,18 @@ public final class UserService {
         WebUser webUser = new WebUser(user.getId(), user.getFirstName(), user.getLastName(),
                 user.getUserName(), user.getPassword(), user.getUserNumber());
         return webUser;
+
+
+    }
+
+    @GET
+    public Collection<WebUser> getAllUsers(){
+        Collection<WebUser> webUsers= new ArrayList<>();
+        Collection<User> users= service.getAllUsers();
+        users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(),
+                      u.getUserName(), u.getPassword(), u.getUserNumber())));
+        return webUsers;
+
 
 
     }
