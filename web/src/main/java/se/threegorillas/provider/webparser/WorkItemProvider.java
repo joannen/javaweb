@@ -39,7 +39,6 @@ public final class WorkItemProvider implements MessageBodyReader<WebWorkItem>, M
         try (JsonWriter writer = new JsonWriter(new OutputStreamWriter(outputStream))) {
             gson.toJson(webWorkItem, WebWorkItem.class, writer);
         }
-
     }
 
     @Override

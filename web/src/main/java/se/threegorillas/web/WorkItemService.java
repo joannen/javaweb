@@ -11,6 +11,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/workitem")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -29,11 +30,12 @@ public final class WorkItemService extends AbstractService {
     public Response allWorkItems() {
         List<WorkItem> workItems = (List) service.getAllWorkItems();
 
-        List<WebWorkItem> webWorkItems = new ArrayList<>();
-        workItems.forEach(w -> webWorkItems.add(new WebWorkItem(w.getId(), w.getDescription())));
-        GenericEntity<Collection<WebWorkItem>> entity = new GenericEntity<Collection<WebWorkItem>>(webWorkItems){};
+        /* cast JpaWorkItems to WebWorkItems */
+        List<WebWorkItem> webWorkItems = workItems.stream()
+                .map(w -> new WebWorkItem(w.getId(), w.getDescription()))
+                .collect(Collectors.toList());
 
-        return Response.ok(entity).build();
+        return Response.ok(webWorkItems).build();
     }
 
     @GET
@@ -77,9 +79,32 @@ public final class WorkItemService extends AbstractService {
         if (exists) {
             return Response.noContent().build();
         } else {
-            URI location = uriInfo.getAbsolutePathBuilder().path(WorkItemService.class, "getOneWorkItem").build(saved.getId());
+            URI location = uriInfo.getAbsolutePathBuilder()
+                    .path(WorkItemService.class, "getOneWorkItem")
+                    .build(saved.getId());
+
             return Response.created(location).build();
         }
+    }
 
+    @DELETE
+    @Path("{id}")
+    public Response deleteWorkItem(@PathParam("id") Long id) {
+
+        WorkItem workItem = service.findWorkItemById(id);
+
+        if (workItem == null) {
+            throw new WebApplicationException("WorkItem not found", 404);
+        }
+
+        return Response.noContent().build();
+    }
+
+    @OPTIONS
+    public Response allowedMethods() {
+        return Response.noContent()
+                .allow("GET", "POST", "PUT", "DELETE")
+                .header("Content-Length", 0)
+                .build();
     }
 }
