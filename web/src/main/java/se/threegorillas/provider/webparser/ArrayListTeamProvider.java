@@ -27,7 +27,7 @@ import java.util.ArrayList;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ArrayListTeamProvider implements MessageBodyWriter<ArrayList<WebTeam>>{
 
-    private static final Gson gson = new GsonBuilder().registerTypeAdapter(ArrayListTeamProvider.class, new ArrayListTeamProvider()).create();
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(ArrayListTeamAdapter.class, new ArrayListTeamAdapter()).create();
 
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
