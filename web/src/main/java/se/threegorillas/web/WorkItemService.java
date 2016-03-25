@@ -97,8 +97,14 @@ public final class WorkItemService extends AbstractService {
             throw new WebApplicationException("WorkItem not found", 404);
         }
 
-
-
         return Response.noContent().build();
+    }
+
+    @OPTIONS
+    public Response allowedMethods() {
+        return Response.noContent()
+                .allow("GET", "POST", "PUT", "DELETE")
+                .header("Content-Length", 0)
+                .build();
     }
 }
