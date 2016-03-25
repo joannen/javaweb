@@ -65,4 +65,8 @@ public class DataBaseService {
         return workItemRepository.findAll();
     }
 
+    public void deleteWorkItem(Long id) {
+        workItemRepository.delete(id);
+    }
+
 }
