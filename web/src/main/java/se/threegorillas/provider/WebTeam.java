@@ -2,9 +2,7 @@ package se.threegorillas.provider;
 
 import java.util.Collection;
 
-/**
- * Created by joanne on 23/03/16.
- */
+
 public class WebTeam {
 
     private final Long id;

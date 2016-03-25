@@ -54,10 +54,10 @@ public class TeamService extends AbstractService {
     }
 
     @GET
-    public Collection<WebTeam> getTeams(){
-        Collection<Team> teams = service.getAllTeams();
+    public Collection<WebTeam> getAllTeams(){
         Collection<WebTeam> webTeams = new ArrayList<>();
-        teams.forEach(team -> webTeams.add(new WebTeam(team.getId(), team.getTeamName(), team.getTeamStatus())));
+        Collection<Team> teams = service.getAllTeams();
+        teams.forEach(t -> webTeams.add(new WebTeam(t.getId(), t.getTeamName(), t.getTeamStatus())));
 
         return webTeams;
     }

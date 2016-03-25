@@ -58,6 +58,7 @@ public class ArrayListTeamProvider implements MessageBodyWriter<ArrayList<WebTea
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("id", webTeam.getId());
                 jsonObject.addProperty("teamName", webTeam.getTeamName());
+                jsonObject.addProperty("teamStatus", webTeam.getTeamStatus());
                 jsonArray.add(jsonObject);
             }
             return jsonArray;
