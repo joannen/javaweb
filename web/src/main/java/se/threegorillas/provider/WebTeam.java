@@ -3,7 +3,7 @@ package se.threegorillas.provider;
 import java.util.Collection;
 
 
-public class WebTeam {
+public final class WebTeam {
 
     private final Long id;
     private final String teamName;

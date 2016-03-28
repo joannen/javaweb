@@ -57,6 +57,10 @@ public class DataBaseService {
 
     public Collection<Team> getAllTeams(){return teamRepository.findAll();}
 
+    public void removeTeam(Long id){
+        teamRepository.delete(id);
+    }
+
     public boolean workItemExists(WorkItem workItem) {
         return workItemRepository.findOne(workItem.getId()) != null;
     }

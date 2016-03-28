@@ -14,6 +14,8 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by TheYellowBelliedMarmot on 2016-03-23.
@@ -45,21 +47,35 @@ public class TeamService extends AbstractService {
 
     @GET
     @Path("{id}")
-    public WebTeam getTeam(@PathParam("id") Long id){
+    public Response getTeam(@PathParam("id") Long id){
 
         Team team = service.findTeamById(id);
+
+        if(team == null){
+            return Response.status(404).build();
+        }
         WebTeam webTeam = new WebTeam(team.getId(), team.getTeamName(), team.getTeamStatus());
 
-        return webTeam;
+        return Response.ok(webTeam).build();
     }
 
     @GET
-    public Collection<WebTeam> getAllTeams(){
-        Collection<WebTeam> webTeams = new ArrayList<>();
-        Collection<Team> teams = service.getAllTeams();
-        teams.forEach(t -> webTeams.add(new WebTeam(t.getId(), t.getTeamName(), t.getTeamStatus())));
+    public Response getAllTeams(){
 
-        return webTeams;
+        List<Team> teams = (List<Team>) service.getAllTeams();
+
+        if(teams.isEmpty()){
+            return Response.status(404).build();
+        }
+        List<WebTeam> webTeams = teams.stream().map(t -> new WebTeam(t.getId(), t.getTeamName(), t.getTeamStatus())).collect(Collectors.toList());
+
+        return Response.ok(webTeams).build();
+
+//        Collection<WebTeam> webTeams = new ArrayList<>();
+//        Collection<Team> teams = service.getAllTeams();
+//        teams.forEach(t -> webTeams.add(new WebTeam(t.getId(), t.getTeamName(), t.getTeamStatus())));
+//
+//        return webTeams;
     }
 
     @PUT
