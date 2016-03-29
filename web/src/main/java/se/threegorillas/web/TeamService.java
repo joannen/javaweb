@@ -1,19 +1,13 @@
 package se.threegorillas.web;
 
+import se.threegorillas.exception.TeamNotFoundException;
 import se.threegorillas.model.Team;
 import se.threegorillas.provider.WebTeam;
-import se.threegorillas.service.DataBaseService;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,8 +46,9 @@ public class TeamService extends AbstractService {
         Team team = service.findTeamById(id);
 
         if(team == null){
-            return Response.status(404).build();
+            throw new TeamNotFoundException(id);
         }
+
         WebTeam webTeam = new WebTeam(team.getId(), team.getTeamName(), team.getTeamStatus());
 
         return Response.ok(webTeam).build();
@@ -65,8 +60,10 @@ public class TeamService extends AbstractService {
         List<Team> teams = (List<Team>) service.getAllTeams();
 
         if(teams.isEmpty()){
-            return Response.status(404).build();
+
+            throw new TeamNotFoundException();
         }
+
         List<WebTeam> webTeams = teams.stream().map(t -> new WebTeam(t.getId(), t.getTeamName(), t.getTeamStatus())).collect(Collectors.toList());
 
         return Response.ok(webTeams).build();
@@ -81,6 +78,7 @@ public class TeamService extends AbstractService {
     @PUT
     @Path("{id}")
     public Response updateTeam(@PathParam("id") Long id, WebTeam team){
+        
         Team t = new Team(team.getId(), team.getTeamName(), team.getTeamStatus());
         service.saveTeam(t);
 
