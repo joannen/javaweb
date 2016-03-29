@@ -85,4 +85,20 @@ public class TeamService extends AbstractService {
         return Response.noContent().build();
 
     }
+
+    @DELETE
+    @Path("{id}")
+    public Response removeTeam(@PathParam("id") Long id){
+
+        Team team = service.findTeamById(id);
+
+        if(team == null){
+            throw new TeamNotFoundException(id);
+        }
+
+        service.removeTeam(id);
+
+        return Response.noContent().build();
+
+    }
 }

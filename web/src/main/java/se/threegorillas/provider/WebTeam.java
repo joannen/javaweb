@@ -8,7 +8,7 @@ public final class WebTeam {
     private final Long id;
     private final String teamName;
     private final String teamStatus;
-//    private Collection<WebUser> users;
+    private Collection<WebUser> users;
 
     public WebTeam(Long id, String teamName, String status){
 
