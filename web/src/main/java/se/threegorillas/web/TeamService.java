@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Path("/team")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class TeamService extends AbstractService {
+public final class TeamService extends AbstractService {
 
     @POST
     public Response createTeam(WebTeam webTeam){

@@ -2,6 +2,7 @@ package se.threegorillas.model;
 
 import se.threegorillas.status.Status;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeSet;
 
@@ -45,7 +46,7 @@ public class User extends AbstractEntity {
 		this.firstName = firstname;
 		this.lastName = lastname;
 		this.password = password;
-		this.workItems = new TreeSet();
+		this.workItems = new ArrayList<>();
 		this.userStatus = Status.ACTIVE;
 		this.userNumber = userNumber;
 	}
@@ -56,7 +57,7 @@ public class User extends AbstractEntity {
 		this.firstName = firstname;
 		this.lastName = lastname;
 		this.password = password;
-		this.workItems = new TreeSet();
+		this.workItems = new ArrayList<>();
 		this.userStatus = Status.ACTIVE;
 		this.userNumber = userNumber;
 	}
