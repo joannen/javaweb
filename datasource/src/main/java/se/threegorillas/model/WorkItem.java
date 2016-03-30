@@ -17,7 +17,7 @@ public class WorkItem extends AbstractEntity {
     private Issue issue;
 
     @Column
-    private String user;
+    private String assignedUsername;
 
     protected WorkItem(){}
 
@@ -31,12 +31,16 @@ public class WorkItem extends AbstractEntity {
        this.status = Status.UNSTARTED;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public String getAssignedUsername() {
+        return assignedUsername;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setAssignedUsername(String assignedUsername) {
+        this.assignedUsername = assignedUsername;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getDescription() {
@@ -68,8 +72,6 @@ public class WorkItem extends AbstractEntity {
     public void setIssue(Issue issue){
         this.issue = issue;
     }
-
-    public String getUser() { return user; }
 
     @Override
     public boolean equals(Object o) {

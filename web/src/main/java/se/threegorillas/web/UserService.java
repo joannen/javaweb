@@ -2,8 +2,10 @@ package se.threegorillas.web;
 
 import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
+import se.threegorillas.model.WorkItem;
 import se.threegorillas.provider.WebTeam;
 import se.threegorillas.provider.WebUser;
+import se.threegorillas.provider.WebWorkItem;
 import se.threegorillas.service.DataBaseService;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +18,7 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Created by joanne on 22/03/16.
@@ -57,10 +60,8 @@ public final class UserService {
         Collection<User> users= service.getAllUsers();
         users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(),
                       u.getUserName(), u.getPassword(), u.getUserNumber())));
+
         return webUsers;
-
-
-
     }
 
     @GET
@@ -87,6 +88,39 @@ public final class UserService {
         service.saveUser(u);
 
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("{id}/workitem")
+    public Collection<WebWorkItem> getAllWorkItemsForOneUser(@PathParam("id") Long id) {
+        User u = service.findUserById(id);
+
+        Collection<WebWorkItem> webWorkItems = u.getWorkItems().stream()
+
+                .map(w -> new WebWorkItem(w.getId(), w.getDescription(), w.getAssignedUsername()))
+
+
+
+
+                .collect(Collectors.toList());
+
+        return webWorkItems;
+    }
+
+    @POST
+    @Path("{id}/workitem")
+    public Response addWorkItemToUser(@PathParam("id") Long id, WebWorkItem webWorkItem) {
+        User u = service.findUserById(id);
+        WorkItem w = new WorkItem(webWorkItem.getId(), webWorkItem.getDescription());
+        u.addWorkItem(w);
+        service.saveWorkItem(w);
+        service.saveUser(u);
+
+        URI location = uriInfo.getAbsolutePathBuilder().path(WorkItemService.class, "getOneWorkItem").build(w.getId());
+
+        return Response.created(location).build();
+
+
     }
 
 }

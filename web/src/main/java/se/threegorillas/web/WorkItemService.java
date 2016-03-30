@@ -18,7 +18,7 @@ public final class WorkItemService extends AbstractService {
     @GET
     @Path("/sample")
     public Response sampleWorkItem() {
-        WebWorkItem webWorkItem = new WebWorkItem(1L, "do some things");
+        WebWorkItem webWorkItem = new WebWorkItem(1L, "do some things", "froanne");
 
         return Response.ok(webWorkItem).build();
     }
@@ -29,7 +29,7 @@ public final class WorkItemService extends AbstractService {
 
         /* cast JpaWorkItems to WebWorkItems */
         List<WebWorkItem> webWorkItems = workItems.stream()
-                .map(w -> new WebWorkItem(w.getId(), w.getDescription()))
+                .map(w -> new WebWorkItem(w.getId(), w.getDescription(), w.getAssignedUsername()))
                 .collect(Collectors.toList());
 
         return Response.ok(webWorkItems).build();
@@ -44,7 +44,7 @@ public final class WorkItemService extends AbstractService {
             return Response.status(404).build();
         }
 
-        WebWorkItem webWorkItem = new WebWorkItem(retrieved.getId(), retrieved.getDescription());
+        WebWorkItem webWorkItem = new WebWorkItem(retrieved.getId(), retrieved.getDescription(), retrieved.getAssignedUsername());
 
         return Response.ok(webWorkItem).build();
     }
