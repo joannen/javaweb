@@ -31,7 +31,7 @@ public class User extends AbstractEntity {
 	@ManyToOne
 	private Team team;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name="user_id")
 	private Collection<WorkItem> workItems;
 

@@ -13,7 +13,7 @@ public class WorkItem extends AbstractEntity {
     @Column(nullable = false)
     private String status;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @Embedded
     private Issue issue;
 
     @Column
@@ -71,7 +71,6 @@ public class WorkItem extends AbstractEntity {
 
     public String getUser() { return user; }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,16 +78,13 @@ public class WorkItem extends AbstractEntity {
 
         WorkItem workItem = (WorkItem) o;
 
-        if (description != null ? !description.equals(workItem.description) : workItem.description != null)
-            return false;
-        return status != null ? status.equals(workItem.status) : workItem.status == null;
+        return !(description != null ? !description.equals(workItem.description) : workItem.description != null);
+
     }
 
     @Override
     public int hashCode() {
-        int result = description != null ? description.hashCode() : 0;
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        return result;
+        return description != null ? description.hashCode() : 0;
     }
 
     @Override
