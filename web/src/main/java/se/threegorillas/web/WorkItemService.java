@@ -4,12 +4,9 @@ import se.threegorillas.model.WorkItem;
 import se.threegorillas.provider.WebWorkItem;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,10 +52,10 @@ public final class WorkItemService extends AbstractService {
     @POST
     public Response createWorkItem(WebWorkItem webWorkItem) {
         WorkItem workItem = new WorkItem(webWorkItem.getDescription());
-        WorkItem saved = service.save(workItem);
+        WorkItem saved = service.saveWorkItem(workItem);
 
         if (saved == null) {
-            throw new WebApplicationException("could not save workitem");
+            throw new WebApplicationException("could not saveWorkItem workitem");
         }
 
         URI location = uriInfo.getAbsolutePathBuilder().path(WorkItemService.class, "getOneWorkItem").build(saved.getId());
@@ -74,7 +71,7 @@ public final class WorkItemService extends AbstractService {
 
         boolean exists = service.workItemExists(workItem);
 
-        WorkItem saved = service.save(workItem);
+        WorkItem saved = service.saveWorkItem(workItem);
 
         if (exists) {
             return Response.noContent().build();

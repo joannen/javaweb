@@ -4,7 +4,6 @@ import se.threegorillas.status.Status;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.TreeSet;
 
 import javax.persistence.*;
 
@@ -17,7 +16,7 @@ public class User extends AbstractEntity {
 	@Column(nullable = false)
 	private String lastName;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String userName;
 
 	@Column(nullable = false)
@@ -26,7 +25,7 @@ public class User extends AbstractEntity {
 	@Column
 	private String userStatus;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String userNumber;
 
 	@ManyToOne
@@ -140,5 +139,18 @@ public class User extends AbstractEntity {
 		workItem.setUser(this.userName);
 		this.workItems.add(workItem);
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", userName='" + userName + '\'' +
+				", password='" + password + '\'' +
+				", userStatus='" + userStatus + '\'' +
+				", userNumber='" + userNumber + '\'' +
+				", team=" + team +
+				'}';
 	}
 }

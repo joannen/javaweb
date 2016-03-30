@@ -6,13 +6,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import se.threegorillas.appConfig.AppConfig;
+import org.springframework.transaction.annotation.Transactional;
+import se.threegorillas.appconfig.AppConfig;
 import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
 import se.threegorillas.model.WorkItem;
-import se.threegorillas.repository.TeamRepository;
-import se.threegorillas.repository.UserRepository;
-import se.threegorillas.repository.WorkItemRepository;
 
 import static org.junit.Assert.*;
 
@@ -24,14 +22,15 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = AppConfig.class)
 public class DataBaseServiceTest {
 
+    @Autowired
+    private DataBaseService service;
 
-
-    @Autowired
-    private TeamRepository teamRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private WorkItemRepository workItemRepository;
+//    @Autowired
+//    private TeamRepository teamRepository;
+//    @Autowired
+//    private UserRepository userRepository;
+//    @Autowired
+//    private WorkItemRepository workItemRepository;
 
     private User user1;
     private User user2;
@@ -49,14 +48,33 @@ public class DataBaseServiceTest {
 
     @Test
     public void workitemShouldBeAddedToUser(){
-        User user = userRepository.save(user1);
-        WorkItem savedWorkItem = workItemRepository.save(workItem);
+        User user = service.saveUser(user1);
+        WorkItem savedWorkItem = service.saveWorkItem(workItem);
         user.addWorkItem(savedWorkItem);
-        User userWithWorkItem = userRepository.save(user);
+        User userWithWorkItem = service.saveUser(user);
 
-        assertTrue(userWithWorkItem.getWorkItems().contains(workItem));
-        assertEquals(workItemRepository.findOne(savedWorkItem.getId()).getUser(), user1.getUserName());
+        assertNotNull(service.findUserById(user.getId()));
+        User retrieved = service.findUserById(userWithWorkItem.getId());
 
+        assertTrue(retrieved.getWorkItems().size() > 0);
+    }
+
+    @Test
+    @Transactional
+    public void userShouldBeAddedToTeam() {
+        Team saved = service.saveTeam(team);
+        assertNotNull(saved);
+
+        User savedUser = service.saveUser(user1);
+
+        saved.addUser(savedUser);
+        Team savedWithUser = service.saveTeam(saved);
+
+        assertNotNull(savedWithUser);
+
+        savedWithUser.getUsers().forEach(System.out::println);
+
+        assertTrue(savedWithUser.getUsers().size() > 0);
     }
 
 

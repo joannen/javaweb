@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 public class WorkItem extends AbstractEntity {
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)

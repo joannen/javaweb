@@ -42,7 +42,7 @@ public class DataBaseService {
     }
 
     //WorkItem
-    public WorkItem save(WorkItem workItem) {
+    public WorkItem saveWorkItem(WorkItem workItem) {
         return workItemRepository.save(workItem);
     }
 
