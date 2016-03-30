@@ -136,7 +136,7 @@ public class User extends AbstractEntity {
 	}
 
 	public User addWorkItem(WorkItem workItem) {
-		workItem.setUser(this.userName);
+		workItem.setStatusStarted();
 		this.workItems.add(workItem);
 		return this;
 	}

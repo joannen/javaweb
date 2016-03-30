@@ -11,6 +11,7 @@ import se.threegorillas.appconfig.AppConfig;
 import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
 import se.threegorillas.model.WorkItem;
+import se.threegorillas.status.Status;
 
 import static org.junit.Assert.*;
 
@@ -77,5 +78,31 @@ public class DataBaseServiceTest {
         assertTrue(savedWithUser.getUsers().size() > 0);
     }
 
+    @Test
+    @Transactional
+    public void workItemStatusShouldBeChanged(){
+
+        WorkItem savedWorkItem = service.saveWorkItem(workItem);
+        assertTrue(savedWorkItem.getStatus().equals(Status.UNSTARTED));
+        user1.addWorkItem(savedWorkItem);
+        service.saveUser(user1);
+        assertTrue(service.findWorkItemById(savedWorkItem.getId()).getStatus().equals(Status.STARTED));
+    }
+
+    @Test
+    @Transactional
+    public void inActivatedUserShouldMakeWorkItemsUnstarted(){
+
+        User savedUser = service.saveUser(user1);
+        assertTrue(service.findUserById(savedUser.getId()).getUserStatus().equals(Status.ACTIVE));
+        WorkItem savedWorkItem = service.saveWorkItem(workItem);
+        savedUser.addWorkItem(savedWorkItem);
+        service.saveUser(savedUser);
+
+        assertTrue(service.findUserById(savedUser.getId()).getWorkItems().contains(savedWorkItem));
+        service.findUserById(savedUser.getId()).setStatusInactive();
+        service.saveUser(savedUser);
+        assertTrue(service.findWorkItemById(savedWorkItem.getId()).getStatus().equals(Status.UNSTARTED));
+    }
 
 }
