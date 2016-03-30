@@ -16,8 +16,8 @@ public class WorkItem extends AbstractEntity {
     @OneToOne(cascade = CascadeType.PERSIST)
     private Issue issue;
 
-    @ManyToOne
-    private User user;
+    @Column
+    private String user;
 
     protected WorkItem(){}
 
@@ -29,6 +29,14 @@ public class WorkItem extends AbstractEntity {
        this.id = id;
        this.description = description;
        this.status = Status.UNSTARTED;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getDescription() {
@@ -61,13 +69,8 @@ public class WorkItem extends AbstractEntity {
         this.issue = issue;
     }
 
-    public User getUser() {
-        return user;
-    }
+    public String getUser() { return user; }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     @Override
     public boolean equals(Object o) {

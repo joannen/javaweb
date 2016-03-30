@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeSet;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Entity
 public class User extends AbstractEntity {
@@ -35,7 +32,8 @@ public class User extends AbstractEntity {
 	@ManyToOne
 	private Team team;
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@JoinColumn(name="user_id")
 	private Collection<WorkItem> workItems;
 
 	protected User() {
@@ -95,7 +93,7 @@ public class User extends AbstractEntity {
 	}
 
 	public Collection<WorkItem> getWorkItems() {
-		return new TreeSet<>(workItems);
+		return new ArrayList<>(workItems);
 	}
 
 	public void setStatusInactive() {
@@ -138,4 +136,9 @@ public class User extends AbstractEntity {
 		return true;
 	}
 
+	public User addWorkItem(WorkItem workItem) {
+		workItem.setUser(this.userName);
+		this.workItems.add(workItem);
+		return this;
+	}
 }
