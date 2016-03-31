@@ -54,9 +54,9 @@ public final class WorkItemProvider implements MessageBodyReader<WebWorkItem>, M
             JsonObject workItemJson = jsonElement.getAsJsonObject();
             Long id = workItemJson.get("id").getAsLong();
             String description = workItemJson.get("description").getAsString();
-            String assignedUsername = workItemJson.get("assignedUser").getAsString();
+//            String assignedUsername = workItemJson.get("assignedUser").getAsString();
 
-            return new WebWorkItem(id, description, assignedUsername);
+            return new WebWorkItem(id, description);
         }
 
 

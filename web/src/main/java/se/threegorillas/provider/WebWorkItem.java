@@ -12,6 +12,12 @@ public final class WebWorkItem {
         this.description = description;
     }
 
+    public WebWorkItem(Long id, String description){
+        this.id = id;
+        this.description = description;
+        this.assignedUsername = null;
+    }
+
     public String getAssignedUsername() {
         return assignedUsername;
     }
