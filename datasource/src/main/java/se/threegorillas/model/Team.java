@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Team extends AbstractEntity {
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String teamName;
 
 	@Column

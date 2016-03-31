@@ -76,4 +76,7 @@ public class DataBaseService {
         workItemRepository.delete(id);
     }
 
+    public Team findByTeamName(String teamName) {return teamRepository.findByTeamName(teamName);}
+
+
 }

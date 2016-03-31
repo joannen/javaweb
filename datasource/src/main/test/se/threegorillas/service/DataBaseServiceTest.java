@@ -1,5 +1,6 @@
 package se.threegorillas.service;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,9 @@ import se.threegorillas.model.Issue;
 import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
 import se.threegorillas.model.WorkItem;
+import se.threegorillas.repository.TeamRepository;
+import se.threegorillas.repository.UserRepository;
+import se.threegorillas.repository.WorkItemRepository;
 import se.threegorillas.status.Status;
 
 import java.util.ArrayList;
@@ -31,12 +35,12 @@ public class DataBaseServiceTest {
     @Autowired
     private DataBaseService service;
 
-//    @Autowired
-//    private TeamRepository teamRepository;
-//    @Autowired
-//    private UserRepository userRepository;
-//    @Autowired
-//    private WorkItemRepository workItemRepository;
+    @Autowired
+    private TeamRepository teamRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private WorkItemRepository workItemRepository;
 
     private User user1;
     private User user2;
@@ -52,6 +56,13 @@ public class DataBaseServiceTest {
         workItem = new WorkItem("CLEAN KITCHEN!!!");
         team = new Team("dreamteam");
         issue =new Issue("kitchen is still dirty!!!");
+    }
+
+    @After
+    public void destroy(){
+        userRepository.findAll().forEach(user -> userRepository.delete(user));
+        workItemRepository.findAll().forEach(workItem -> workItemRepository.delete(workItem));
+        teamRepository.findAll().forEach(team -> teamRepository.delete(team));
     }
 
     @Test
@@ -70,17 +81,18 @@ public class DataBaseServiceTest {
 
     @Test
     public void userShouldBeAddedToTeam() {
-        Team saved = service.saveTeam(team);
-        assertNotNull(saved);
+        Team savedTeam = service.saveTeam(team);
+        assertNotNull(savedTeam);
 
         User savedUser = service.saveUser(user1);
 
-        saved.addUser(savedUser);
-        Team savedWithUser = service.saveTeam(saved);
+        savedTeam.addUser(savedUser);
+        service.saveUser(savedUser);
+        Team savedWithUser = service.saveTeam(savedTeam);
 
         assertNotNull(savedWithUser);
 
-        Team teamById = service.findTeamById(savedWithUser.getId());
+        Team teamById = service.findByTeamName(savedWithUser.getTeamName());
         teamById.getUsers().forEach(System.out::println);
 
         assertTrue(teamById.getUsers().size() > 0);
@@ -107,8 +119,8 @@ public class DataBaseServiceTest {
         service.saveWorkItem(savedWorkItem);
         service.saveUser(savedUser);
 
-        assertTrue(service.findUserById(savedUser.getId()).getWorkItems().contains(savedWorkItem));
-        User inactiveUser = service.findUserById(savedUser.getId());
+        assertTrue(service.findUserByUsername(savedUser.getUserName()).getWorkItems().contains(savedWorkItem));
+        User inactiveUser = service.findUserByUsername(savedUser.getUserName());
         inactiveUser.setStatusInactive();
         service.saveUser(inactiveUser);
         assertTrue(service.findWorkItemById(savedWorkItem.getId()).getStatus().equals(Status.UNSTARTED));
@@ -138,8 +150,8 @@ public class DataBaseServiceTest {
         service.saveWorkItem(workItem);
         service.saveUser(savedUser);
 
-        assertTrue(service.findUserById(savedUser.getId()).getWorkItems().contains(workItem));
-        Collection<WorkItem> workItems = service.findUserById(savedUser.getId()).getWorkItems();
+        assertTrue(service.findUserByUsername(savedUser.getUserName()).getWorkItems().contains(workItem));
+        Collection<WorkItem> workItems = service.findUserByUsername(savedUser.getUserName()).getWorkItems();
         Collection<Issue> issues = new ArrayList<>();
 
         for(WorkItem w:workItems){
