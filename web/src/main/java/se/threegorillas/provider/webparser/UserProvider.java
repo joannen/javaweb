@@ -70,7 +70,7 @@ public final class UserProvider implements MessageBodyReader<WebUser>, MessageBo
         public JsonElement serialize(WebUser webUser, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject json = new JsonObject();
 
-            json.addProperty("id",webUser.getId());
+            json.addProperty("id", webUser.getId());
             json.addProperty("firstName", webUser.getFirstName());
             json.addProperty("lastName", webUser.getLastName());
             json.addProperty("username", webUser.getUsername());

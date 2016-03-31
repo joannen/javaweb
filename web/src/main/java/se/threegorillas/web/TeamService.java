@@ -105,6 +105,7 @@ public final class TeamService extends AbstractService {
         return Response.noContent().build();
 
     }
+
     @POST
     @Path("{id}/user")
     public Response addUserToTeam(@PathParam("id") Long id, WebUser webUser){

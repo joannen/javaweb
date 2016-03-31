@@ -1,5 +1,7 @@
 package se.threegorillas.provider;
 
+import se.threegorillas.status.Status;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -9,6 +11,7 @@ public final class WebTeam {
     private final Long id;
     private final String teamName;
     private final String teamStatus;
+
     public WebTeam(Long id, String teamName, String status){
 
         this.id=id;
@@ -17,6 +20,11 @@ public final class WebTeam {
 
     }
 
+    public WebTeam(Long id, String teamName) {
+        this.id = id;
+        this.teamName = teamName;
+        this.teamStatus = Status.ACTIVE;
+    }
 
 
     public String getTeamName() {

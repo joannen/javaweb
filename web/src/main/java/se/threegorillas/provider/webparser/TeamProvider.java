@@ -64,9 +64,8 @@ public class TeamProvider implements MessageBodyReader<WebTeam>, MessageBodyWrit
 
             Long id = teamJson.get("id").getAsLong();
             String teamName = teamJson.get("teamName").getAsString();
-            String teamStatus = teamJson.get("teamStatus").getAsString();
 
-            return new WebTeam(id, teamName, teamStatus);
+            return new WebTeam(id, teamName);
         }
 
         @Override

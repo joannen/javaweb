@@ -1,7 +1,9 @@
 package se.threegorillas.web;
 
+import se.threegorillas.model.Issue;
 import se.threegorillas.model.WorkItem;
 import se.threegorillas.provider.WebWorkItem;
+import se.threegorillas.status.Status;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,7 +20,9 @@ public final class WorkItemService extends AbstractService {
     @GET
     @Path("/sample")
     public Response sampleWorkItem() {
-        WebWorkItem webWorkItem = new WebWorkItem(1L, "do some things", "froanne");
+
+        Issue issue = new Issue("things are not done");
+        WebWorkItem webWorkItem = new WebWorkItem(1L, "do some things", "froanne", issue.getIssueDescription(), Status.UNSTARTED);
 
         return Response.ok(webWorkItem).build();
     }
@@ -29,7 +33,7 @@ public final class WorkItemService extends AbstractService {
 
         /* cast JpaWorkItems to WebWorkItems */
         List<WebWorkItem> webWorkItems = workItems.stream()
-                .map(w -> new WebWorkItem(w.getId(), w.getDescription(), w.getAssignedUsername()))
+                .map(w -> new WebWorkItem(w.getId(), w.getDescription(), w.getAssignedUsername(), w.getStatus()))
                 .collect(Collectors.toList());
 
         return Response.ok(webWorkItems).build();
@@ -44,7 +48,8 @@ public final class WorkItemService extends AbstractService {
             return Response.status(404).build();
         }
 
-        WebWorkItem webWorkItem = new WebWorkItem(retrieved.getId(), retrieved.getDescription(), retrieved.getAssignedUsername());
+        WebWorkItem webWorkItem = new WebWorkItem(retrieved.getId(), retrieved.getDescription(),
+                retrieved.getAssignedUsername(), retrieved.getStatus());
 
         return Response.ok(webWorkItem).build();
     }
@@ -103,5 +108,45 @@ public final class WorkItemService extends AbstractService {
                 .allow("GET", "POST", "PUT", "DELETE")
                 .header("Content-Length", 0)
                 .build();
+    }
+
+    @GET
+    @Path("{id}/issue")
+    public Response getIssue(@PathParam("id") Long id) {
+        WorkItem workItem = service.findWorkItemById(id);
+
+        if (workItem == null) {
+            throw new WebApplicationException(404);
+        }
+
+        if (workItem.getIssue() == null) {
+            throw new WebApplicationException(404);
+        }
+
+        return Response.ok(workItem.getIssue().getIssueDescription()).build();
+    }
+
+    @POST
+    @Path("{id}/issue")
+    public Response addIssueToWorkItem(@PathParam("id") Long id, String body) {
+        WorkItem workItem = service.findWorkItemById(id);
+
+        if (workItem == null) {
+            throw new WebApplicationException(404);
+        }
+
+        Issue issue = new Issue(body);
+
+        workItem.setIssue(issue);
+        WorkItem workItem1 = service.saveWorkItem(workItem);
+
+        if (workItem1 == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        URI location = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "getOneWorkItem").build();
+
+        return Response.created(location).build();
+
     }
 }
