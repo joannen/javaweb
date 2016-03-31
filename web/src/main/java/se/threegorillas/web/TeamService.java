@@ -2,12 +2,16 @@ package se.threegorillas.web;
 
 import se.threegorillas.exception.TeamNotFoundException;
 import se.threegorillas.model.Team;
+import se.threegorillas.model.User;
 import se.threegorillas.provider.WebTeam;
+import se.threegorillas.provider.WebUser;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,4 +105,35 @@ public final class TeamService extends AbstractService {
         return Response.noContent().build();
 
     }
+    @POST
+    @Path("{id}/user")
+    public Response addUserToTeam(@PathParam("id") Long id, WebUser webUser){
+        User u;
+        if(service.findUserById(webUser.getId()) != null){
+            u=service.findUserById(webUser.getId());
+        }else{
+            u = new User(webUser.getUsername(), webUser.getFirstName(), webUser.getLastName(), webUser.getPassword(), webUser.getUserNumber());
+        }
+
+        Team team = service.findTeamById(id);
+        team.addUser(u);
+        service.saveUser(u);
+        service.saveTeam(team);
+
+        URI location = uriInfo.getAbsolutePathBuilder().path(UserService.class, "getUser").build(u.getId());
+
+        return Response.created(location).build();
+    }
+
+    @GET
+    @Path("{id}/user")
+    public Collection<WebUser> getAllUsersForTeam(@PathParam("id") Long id){
+        Collection<WebUser> webUsers= new ArrayList<>();
+        Collection<User> users = service.findTeamById(id).getUsers();
+        users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(), u.getUserName(), u.getPassword(), u.getUserNumber())));
+
+        return webUsers;
+    }
+
+
 }

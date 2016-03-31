@@ -111,7 +111,14 @@ public final class UserService {
     @Path("{id}/workitem")
     public Response addWorkItemToUser(@PathParam("id") Long id, WebWorkItem webWorkItem) {
         User u = service.findUserById(id);
-        WorkItem w = new WorkItem(webWorkItem.getId(), webWorkItem.getDescription());
+        WorkItem w;
+        if(service.findWorkItemById(webWorkItem.getId()) !=null){
+            w=service.findWorkItemById(webWorkItem.getId());
+
+        }else {
+            w= new WorkItem(webWorkItem.getDescription());
+        }
+
         u.addWorkItem(w);
         service.saveWorkItem(w);
         service.saveUser(u);
