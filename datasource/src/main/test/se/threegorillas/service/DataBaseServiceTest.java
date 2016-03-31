@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 import se.threegorillas.appconfig.AppConfig;
 import se.threegorillas.model.Issue;
 import se.threegorillas.model.Team;
@@ -54,15 +55,16 @@ public class DataBaseServiceTest {
     }
 
     @Test
-    public void workitemShouldBeAddedToUser(){
+    public void workItemShouldBeAddedToUser(){
         User user = service.saveUser(user1);
         WorkItem savedWorkItem = service.saveWorkItem(workItem);
         user.addWorkItem(savedWorkItem);
         User userWithWorkItem = service.saveUser(user);
 
-        assertNotNull(service.findUserById(user.getId()));
-        User retrieved = service.findUserById(userWithWorkItem.getId());
+        assertNotNull(service.findUserByUsername(user.getUserName()));
+        User retrieved = service.findUserByUsername(userWithWorkItem.getUserName());
 
+        System.out.println(retrieved.getWorkItems());
         assertTrue(retrieved.getWorkItems().size() > 0);
     }
 
@@ -78,9 +80,10 @@ public class DataBaseServiceTest {
 
         assertNotNull(savedWithUser);
 
-        savedWithUser.getUsers().forEach(System.out::println);
+        Team teamById = service.findTeamById(savedWithUser.getId());
+        teamById.getUsers().forEach(System.out::println);
 
-        assertTrue(savedWithUser.getUsers().size() > 0);
+        assertTrue(teamById.getUsers().size() > 0);
     }
 
     @Test

@@ -2,6 +2,7 @@ package se.threegorillas.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
 import se.threegorillas.model.WorkItem;
@@ -40,6 +41,8 @@ public class DataBaseService {
     public Collection<User> getAllUsers(){
         return userRepository.findAll();
     }
+
+    public User findUserByUsername(String username){ return userRepository.findByUserName(username);}
 
     //WorkItem
     public WorkItem saveWorkItem(WorkItem workItem) {

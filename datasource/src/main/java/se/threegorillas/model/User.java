@@ -25,13 +25,13 @@ public class User extends AbstractEntity {
 	@Column
 	private String userStatus;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String userNumber;
 
 	@ManyToOne
 	private Team team;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@OneToMany(cascade = CascadeType.MERGE)
 	@JoinColumn(name="user_id")
 	private Collection<WorkItem> workItems;
 

@@ -19,7 +19,7 @@ public class Team extends AbstractEntity {
 	@Column
 	private String teamStatus;
 
-	@OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "team")
 	private Collection<User> users;
 
 	protected Team() {
