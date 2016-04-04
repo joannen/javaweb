@@ -16,7 +16,7 @@ public class Team extends AbstractEntity {
 	@Column(nullable = false, unique = true)
 	private String teamName;
 
-	@Column
+	@Column(nullable = false)
 	private String teamStatus;
 
 	@OneToMany(mappedBy = "team")
@@ -31,10 +31,10 @@ public class Team extends AbstractEntity {
 		users = new HashSet();
 	}
 
-	public Team(Long id, String teamName, String status) {
+	public Team(Long id, String teamName, String teamStatus) {
 		this.id = id;
 		this.teamName = teamName;
-		this.teamStatus = status;
+		this.teamStatus = teamStatus;
 		users = new HashSet();
 	}
 

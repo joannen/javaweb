@@ -12,11 +12,11 @@ public final class WebTeam {
     private final String teamName;
     private final String teamStatus;
 
-    public WebTeam(Long id, String teamName, String status){
+    public WebTeam(Long id, String teamName, String teamStatus){
 
         this.id=id;
         this.teamName = teamName;
-        this.teamStatus = status;
+        this.teamStatus = teamStatus;
 
     }
 

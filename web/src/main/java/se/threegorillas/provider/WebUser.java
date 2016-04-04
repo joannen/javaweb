@@ -1,7 +1,5 @@
 package se.threegorillas.provider;
 
-import java.util.Collection;
-
 public final class WebUser {
 
     private final Long id;

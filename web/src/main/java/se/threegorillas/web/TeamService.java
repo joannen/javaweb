@@ -72,11 +72,6 @@ public final class TeamService extends AbstractService {
 
         return Response.ok(webTeams).build();
 
-//        Collection<WebTeam> webTeams = new ArrayList<>();
-//        Collection<Team> teams = service.getAllTeams();
-//        teams.forEach(t -> webTeams.add(new WebTeam(t.getId(), t.getTeamName(), t.getTeamStatus())));
-//
-//        return webTeams;
     }
 
     @PUT
@@ -84,9 +79,19 @@ public final class TeamService extends AbstractService {
     public Response updateTeam(@PathParam("id") Long id, WebTeam team){
         
         Team t = new Team(team.getId(), team.getTeamName(), team.getTeamStatus());
-        service.saveTeam(t);
 
-        return Response.noContent().build();
+        boolean teamExist = service.teamExists(t);
+        Team savedTeam = service.saveTeam(t);
+
+        if(teamExist){
+            return Response.noContent().build();
+        } else {
+            URI location = uriInfo.getAbsolutePathBuilder()
+                    .path(TeamService.class, "getTeam")
+                    .build(savedTeam.getId());
+
+            return Response.created(location).build();
+        }
 
     }
 
@@ -131,6 +136,7 @@ public final class TeamService extends AbstractService {
     public Collection<WebUser> getAllUsersForTeam(@PathParam("id") Long id){
         Collection<WebUser> webUsers= new ArrayList<>();
         Collection<User> users = service.findTeamById(id).getUsers();
+
         users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(), u.getUserName(), u.getPassword(), u.getUserNumber())));
 
         return webUsers;

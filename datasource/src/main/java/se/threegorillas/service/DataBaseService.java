@@ -53,17 +53,6 @@ public class DataBaseService {
         return workItemRepository.findOne(id);
     }
 
-    //Team
-    public Team saveTeam(Team team){ return teamRepository.save(team);}
-
-    public Team findTeamById(Long id){ return teamRepository.findOne(id); }
-
-    public Collection<Team> getAllTeams(){return teamRepository.findAll();}
-
-    public void removeTeam(Long id){
-        teamRepository.delete(id);
-    }
-
     public boolean workItemExists(WorkItem workItem) {
         return workItemRepository.findOne(workItem.getId()) != null;
     }
@@ -75,6 +64,19 @@ public class DataBaseService {
     public void deleteWorkItem(Long id) {
         workItemRepository.delete(id);
     }
+
+    //Team
+    public Team saveTeam(Team team){ return teamRepository.save(team);}
+
+    public Team findTeamById(Long id){ return teamRepository.findOne(id); }
+
+    public Collection<Team> getAllTeams(){return teamRepository.findAll();}
+
+    public void removeTeam(Long id){
+        teamRepository.delete(id);
+    }
+
+    public boolean teamExists(Team team){ return teamRepository.findOne(team.getId()) != null;}
 
     public Team findByTeamName(String teamName) {return teamRepository.findByTeamName(teamName);}
 
