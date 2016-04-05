@@ -16,7 +16,7 @@ public class User extends AbstractEntity {
 	@Column(nullable = false)
 	private String lastName;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String userName;
 
 	@Column(nullable = false)
@@ -25,7 +25,7 @@ public class User extends AbstractEntity {
 	@Column
 	private String userStatus;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String userNumber;
 
 	@ManyToOne

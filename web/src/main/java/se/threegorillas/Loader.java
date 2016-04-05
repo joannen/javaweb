@@ -1,6 +1,7 @@
 package se.threegorillas;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import se.threegorillas.model.User;
 import se.threegorillas.service.DataBaseService;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +31,12 @@ public final class Loader extends Application{
 
         DataBaseService dataBaseService = context.getBean(DataBaseService.class);
         servletContext.setAttribute("database", dataBaseService);
+        saveSampleUser();
+    }
+
+    private void saveSampleUser(){
+        DataBaseService service = (DataBaseService) servletContext.getAttribute("database");
+        service.saveUser(new User(1L, "A", "A", "A", "A", "A"));
     }
 
     @PreDestroy

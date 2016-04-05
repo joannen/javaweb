@@ -44,6 +44,25 @@ public final class WebUser {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WebUser webUser = (WebUser) o;
+
+        if (username != null ? !username.equals(webUser.username) : webUser.username != null) return false;
+        return !(userNumber != null ? !userNumber.equals(webUser.userNumber) : webUser.userNumber != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = username != null ? username.hashCode() : 0;
+        result = 31 * result + (userNumber != null ? userNumber.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "WebUser{" +
                 "id=" + id +
