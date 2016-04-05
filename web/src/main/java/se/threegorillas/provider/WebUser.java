@@ -11,14 +11,12 @@ public final class WebUser {
 
 
     public WebUser(Long id, String firstName, String lastName, String username, String password, String userNumber) {
-
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.userNumber = userNumber;
-
     }
 
     public String getUsername() {
@@ -48,8 +46,12 @@ public final class WebUser {
     @Override
     public String toString() {
         return "WebUser{" +
-                "username='" + username + '\'' +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", userNumber='" + userNumber + '\'' +
                 '}';
     }
 }
