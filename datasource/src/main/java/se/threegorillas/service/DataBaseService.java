@@ -3,6 +3,7 @@ package se.threegorillas.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import se.threegorillas.exception.EntityNotFoundException;
 import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
 import se.threegorillas.model.WorkItem;
@@ -81,4 +82,15 @@ public class DataBaseService {
     public Team findByTeamName(String teamName) {return teamRepository.findByTeamName(teamName);}
 
 
+    public User findUserByUserNumber(String usernumber) {
+        User user = userRepository.findByUserNumber(usernumber);
+        if(user==null){
+            throw new EntityNotFoundException("User with userNumber: " +usernumber +" not found");
+        }
+        return user;
+    }
+
+    public Collection<User> searchForUser(String search) {
+        return userRepository.findByUsernameOrFirstNameOrLastNameContaining(search);
+    }
 }

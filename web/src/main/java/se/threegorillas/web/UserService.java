@@ -1,5 +1,6 @@
 package se.threegorillas.web;
 
+import se.threegorillas.exception.EntityNotFoundException;
 import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
 import se.threegorillas.model.WorkItem;
@@ -42,10 +43,9 @@ public final class UserService {
     }
 
     @GET
-    @Path("{id}")
-    public WebUser getUser(@PathParam("id") Long id){
-        User user = service.findUserById(id);
-
+    @Path("{userNumber}")
+    public WebUser getUser(@PathParam("userNumber") String usernumber){
+        User user = service.findUserByUserNumber(usernumber);
 
         WebUser webUser = new WebUser(user.getId(), user.getFirstName(), user.getLastName(),
                 user.getUserName(), user.getPassword(), user.getUserNumber());
@@ -55,11 +55,16 @@ public final class UserService {
     }
 
     @GET
-    public Collection<WebUser> getAllUsers(){
+    public Collection<WebUser> getAllUsers(@QueryParam("search")@DefaultValue("") String search){
         Collection<WebUser> webUsers= new ArrayList<>();
-        Collection<User> users= service.getAllUsers();
+        Collection<User> users;
+        if(search.equals("")){
+            users= service.getAllUsers();
+        }else {
+            users = service.searchForUser(search);
+        }
         users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(),
-                      u.getUserName(), u.getPassword(), u.getUserNumber())));
+                u.getUserName(), u.getPassword(), u.getUserNumber())));
 
         return webUsers;
     }
@@ -77,15 +82,16 @@ public final class UserService {
     public Response createUser(WebUser user){
         User u = new User(user.getUsername(),user.getFirstName(), user.getLastName(), user.getPassword(), user.getUserNumber());
         User savedUser = service.saveUser(u);
-        URI location = uriInfo.getAbsolutePathBuilder().path(savedUser.getId().toString()).build();
+        URI location = uriInfo.getAbsolutePathBuilder().path(savedUser.getUserNumber()).build();
         return Response.created(location).build();
     }
 
     @PUT
-    @Path("{id}")
-    public Response updateUser(@PathParam("id") Long id, WebUser webUser){
-        User u = new User(webUser.getId(), webUser.getUsername(), webUser.getFirstName(), webUser.getLastName(), webUser.getPassword(), webUser.getUserNumber());
-        service.saveUser(u);
+    @Path("{userNumber}")
+    public Response updateUser(@PathParam("userNumber") String userNumber, WebUser webUser){
+        User user = service.findUserByUserNumber(userNumber);
+        User userToSave = new User(webUser.getId(), webUser.getUsername(), webUser.getFirstName(), webUser.getLastName(), webUser.getPassword(), webUser.getUserNumber());
+        service.saveUser(userToSave);
 
         return Response.noContent().build();
     }
@@ -129,5 +135,7 @@ public final class UserService {
 
 
     }
+
+
 
 }

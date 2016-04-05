@@ -21,6 +21,8 @@ public class UserServiceTest {
     private WebTarget sampleUser;
     private WebTarget postUser;
     private WebTarget userWithId;
+    private WebTarget getAllUsers;
+    private WebTarget getUsersWithParam;
 
 
     @Before
@@ -29,6 +31,8 @@ public class UserServiceTest {
         sampleUser = client.target(url).path("sample");
         postUser = client.target(url);
         userWithId = client.target(url).path("{id}");
+        getAllUsers =client.target(url);
+        getUsersWithParam = getAllUsers.queryParam("search", "{search}");
 
     }
 
@@ -54,7 +58,6 @@ public class UserServiceTest {
         WebUser userToSave = new WebUser(1L, "abc",  "joanne", "noriiiiiiiiiiiii", "123", "100000000000001");
 
         String location = postUser.request().post(Entity.entity(userToSave, MediaType.APPLICATION_JSON_TYPE)).getHeaderString("location");
-
         WebTarget getUserWithId = client.target(location);
         WebUser retrievedUser = getUserWithId.request().get(WebUser.class);
         assertEquals(userToSave, retrievedUser);
@@ -74,13 +77,27 @@ public class UserServiceTest {
         int updateStatus = getUserWithId.request().put(Entity.entity(updatedUser, MediaType.APPLICATION_JSON_TYPE)).getStatus();
         assertTrue(updateStatus == 204);
 
-        getUserWithId = client.target(location);
-
-        retrievedUser = getUserWithId.request().get(WebUser.class);
+        retrievedUser = userWithId.resolveTemplate("id", updatedUser.getUserNumber()).request().get(WebUser.class);
         System.out.println(retrievedUser);
 
         assertEquals(retrievedUser, updatedUser);
     }
+
+    @Test
+    public void shouldThrowExceptionWhenUserIsNotFound(){
+        int status =userWithId.resolveTemplate("id", 10).request().get().getStatus();
+        System.out.println(userWithId.resolveTemplate("id", 10).request().get().readEntity(String.class));
+        assertEquals(status, 404);
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForUsers(){
+
+        
+
+    }
+
+
 
 
 
