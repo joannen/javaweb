@@ -25,7 +25,7 @@ import java.util.Iterator;
 @Provider
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ArrayListUserProvider implements  MessageBodyWriter<ArrayList<WebUser>> {
+public class ArrayListUserProvider implements  MessageBodyWriter<ArrayList<WebUser>>, MessageBodyReader<ArrayList<WebUser>> {
 
     private static final Gson gson = new GsonBuilder().registerTypeAdapter(ArrayListUserAdapter.class, new ArrayListUserAdapter()).create();
 
@@ -49,7 +49,17 @@ public class ArrayListUserProvider implements  MessageBodyWriter<ArrayList<WebUs
 
     }
 
-    private static final class ArrayListUserAdapter implements JsonSerializer<ArrayList<WebUser>>{
+    @Override
+    public boolean isReadable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
+        return aClass.isAssignableFrom(ArrayList.class);
+    }
+
+    @Override
+    public ArrayList<WebUser> readFrom(Class<ArrayList<WebUser>> aClass, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> multivaluedMap, InputStream inputStream) throws IOException, WebApplicationException {
+        return gson.fromJson(new InputStreamReader(inputStream), ArrayList.class);
+    }
+
+    private static final class ArrayListUserAdapter implements JsonSerializer<ArrayList<WebUser>>, JsonDeserializer<ArrayList<WebUser>>{
 
 
         @Override
@@ -67,6 +77,22 @@ public class ArrayListUserProvider implements  MessageBodyWriter<ArrayList<WebUs
                 jsonArray.add(json2);
             }
             return jsonArray;
+        }
+
+        @Override
+        public ArrayList<WebUser> deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            //            JsonObject json = jsonElement.getAsJsonObject();
+            JsonArray jArray = jsonElement.getAsJsonArray();
+            Iterator<JsonElement> iterator = jArray.iterator();
+            ArrayList<WebUser> webUsers = new ArrayList<>();
+
+            while (iterator.hasNext()){
+                JsonElement json = iterator.next();
+                WebUser u = gson.fromJson(json, (Class<WebUser>)type);
+                webUsers.add(u);
+            }
+
+            return webUsers;
         }
     }
 }

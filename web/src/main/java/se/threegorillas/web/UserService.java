@@ -44,7 +44,7 @@ public final class UserService {
 
     @GET
     @Path("{userNumber}")
-    public WebUser getUser(@PathParam("userNumber") String usernumber){
+    public WebUser getUser(@PathParam("userNumber") String usernumber) {
         User user = service.findUserByUserNumber(usernumber);
 
         WebUser webUser = new WebUser(user.getId(), user.getFirstName(), user.getLastName(),
@@ -55,14 +55,10 @@ public final class UserService {
     }
 
     @GET
-    public Collection<WebUser> getAllUsers(@QueryParam("search")@DefaultValue("") String search){
-        Collection<WebUser> webUsers= new ArrayList<>();
-        Collection<User> users;
-        if(search.equals("")){
-            users= service.getAllUsers();
-        }else {
-            users = service.searchForUser(search);
-        }
+    public Collection<WebUser> getAllUsers() {
+        Collection<WebUser> webUsers = new ArrayList<>();
+        Collection<User> users = service.getAllUsers();
+
         users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(),
                 u.getUserName(), u.getPassword(), u.getUserNumber())));
 
@@ -73,14 +69,14 @@ public final class UserService {
     @Path("/sample")
     public Response sampleUser() {
 
-        WebUser user = new WebUser(1L,"joanne", "nori", "fghj", "sdfghjkl", "1234");
+        WebUser user = new WebUser(1L, "joanne", "nori", "fghj", "sdfghjkl", "1234");
 
         return Response.ok(user).build();
     }
 
     @POST
-    public Response createUser(WebUser user){
-        User u = new User(user.getUsername(),user.getFirstName(), user.getLastName(), user.getPassword(), user.getUserNumber());
+    public Response createUser(WebUser user) {
+        User u = new User(user.getUsername(), user.getFirstName(), user.getLastName(), user.getPassword(), user.getUserNumber());
         User savedUser = service.saveUser(u);
         URI location = uriInfo.getAbsolutePathBuilder().path(savedUser.getUserNumber()).build();
         return Response.created(location).build();
@@ -88,7 +84,7 @@ public final class UserService {
 
     @PUT
     @Path("{userNumber}")
-    public Response updateUser(@PathParam("userNumber") String userNumber, WebUser webUser){
+    public Response updateUser(@PathParam("userNumber") String userNumber, WebUser webUser) {
         User user = service.findUserByUserNumber(userNumber);
         User userToSave = new User(webUser.getId(), webUser.getUsername(), webUser.getFirstName(), webUser.getLastName(), webUser.getPassword(), webUser.getUserNumber());
         service.saveUser(userToSave);
@@ -106,8 +102,6 @@ public final class UserService {
                 .map(w -> new WebWorkItem(w.getId(), w.getDescription(), w.getAssignedUsername()))
 
 
-
-
                 .collect(Collectors.toList());
 
         return webWorkItems;
@@ -118,11 +112,11 @@ public final class UserService {
     public Response addWorkItemToUser(@PathParam("id") Long id, WebWorkItem webWorkItem) {
         User u = service.findUserById(id);
         WorkItem w;
-        if(service.findWorkItemById(webWorkItem.getId()) !=null){
-            w=service.findWorkItemById(webWorkItem.getId());
+        if (service.findWorkItemById(webWorkItem.getId()) != null) {
+            w = service.findWorkItemById(webWorkItem.getId());
 
-        }else {
-            w= new WorkItem(webWorkItem.getDescription());
+        } else {
+            w = new WorkItem(webWorkItem.getDescription());
         }
 
         u.addWorkItem(w);
@@ -135,6 +129,18 @@ public final class UserService {
 
 
     }
+
+    @GET
+    @Path("/search")
+    public Collection<WebUser> searchForUser(@QueryParam("query") String query) {
+        Collection<User> users = service.searchForUser(query);
+        Collection<WebUser> webUsers = new ArrayList<>();
+
+        users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(), u.getUserName(), u.getPassword(), u.getUserNumber())));
+
+        return webUsers;
+    }
+
 
 
 

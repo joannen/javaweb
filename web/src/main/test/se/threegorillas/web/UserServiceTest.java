@@ -3,12 +3,15 @@ package se.threegorillas.web;
 import org.junit.Before;
 import org.junit.Test;
 import se.threegorillas.provider.WebUser;
+import se.threegorillas.provider.webparser.ArrayListUserProvider;
 import se.threegorillas.provider.webparser.UserProvider;
 
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -22,17 +25,17 @@ public class UserServiceTest {
     private WebTarget postUser;
     private WebTarget userWithId;
     private WebTarget getAllUsers;
-    private WebTarget getUsersWithParam;
+    private WebTarget searchForUsers;
 
 
     @Before
     public void setup() {
-        client = ClientBuilder.newClient().register(UserProvider.class);
+        client = ClientBuilder.newClient().register(UserProvider.class).register(ArrayListUserProvider.class);
         sampleUser = client.target(url).path("sample");
         postUser = client.target(url);
         userWithId = client.target(url).path("{id}");
         getAllUsers =client.target(url);
-        getUsersWithParam = getAllUsers.queryParam("search", "{search}");
+        searchForUsers= client.target(url).path("search");
 
     }
 
@@ -93,7 +96,10 @@ public class UserServiceTest {
     @Test
     public void shouldBeAbleToSearchForUsers(){
 
-        
+        WebTarget search = searchForUsers.queryParam("query","cde");
+        Collection<WebUser> webUsers = search.request().get(ArrayList.class);
+        System.out.println(webUsers);
+        assertTrue(webUsers.size() >0);
 
     }
 
