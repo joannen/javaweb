@@ -25,9 +25,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u left join fetch u.workItems where u.userName = ?1")
     User findByUserName(String userName);
 
-//    @Query("select u from User u where u.userName like %?1" )
-            //or u.firstName LIKE :1 or u.lastName LIKE :1")
-//    Collection<User> findByUsernameOrFirstNameOrLastNameLike(String search);
+    @Query("select u from User u where u.userName like ?1 or u.lastName like ?1 or u.firstName like ?1")
+    Collection<User> findByUserNameOrLastNameOrFirstNameLike(String search);
 
     Collection<User> findByFirstNameLike(String firstname);
     Collection<User> findByTeam(Team t);

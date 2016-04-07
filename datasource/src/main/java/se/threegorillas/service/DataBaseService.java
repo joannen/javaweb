@@ -90,6 +90,7 @@ public class DataBaseService {
     }
 
     public Collection<User> searchForUser(String search) {
-        return userRepository.findByFirstNameLike(search);
+        String addedWildCards = "%" + search + "%";
+        return userRepository.findByUserNameOrLastNameOrFirstNameLike(addedWildCards);
     }
 }
