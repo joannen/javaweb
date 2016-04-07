@@ -19,23 +19,26 @@ import static org.junit.Assert.assertTrue;
 
 public class UserServiceTest {
 
-    private final String url = "http://localhost:8080/web/user";
+    private final String userUrl = "http://localhost:8080/web/user";
+    private final String teamUrl = "http://localhost:8080/web/team";
     private Client client;
     private WebTarget sampleUser;
     private WebTarget postUser;
     private WebTarget userWithId;
     private WebTarget getAllUsers;
     private WebTarget searchForUsers;
+    private WebTarget searchForUsersByTeam;
 
 
     @Before
     public void setup() {
         client = ClientBuilder.newClient().register(UserProvider.class).register(ArrayListUserProvider.class);
-        sampleUser = client.target(url).path("sample");
-        postUser = client.target(url);
-        userWithId = client.target(url).path("{id}");
-        getAllUsers =client.target(url);
-        searchForUsers= client.target(url).path("search");
+        sampleUser = client.target(userUrl).path("sample");
+        postUser = client.target(userUrl);
+        userWithId = client.target(userUrl).path("{id}");
+        getAllUsers =client.target(userUrl);
+        searchForUsers= client.target(userUrl).path("search");
+        searchForUsersByTeam = client.target(teamUrl).path("{id}/user");
 
     }
 
@@ -102,6 +105,8 @@ public class UserServiceTest {
         assertTrue(webUsers.size() >0);
 
     }
+
+
 
 
 

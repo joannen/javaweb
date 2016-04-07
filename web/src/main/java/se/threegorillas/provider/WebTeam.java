@@ -20,6 +20,25 @@ public final class WebTeam {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WebTeam webTeam = (WebTeam) o;
+
+        if (teamName != null ? !teamName.equals(webTeam.teamName) : webTeam.teamName != null) return false;
+        return !(teamStatus != null ? !teamStatus.equals(webTeam.teamStatus) : webTeam.teamStatus != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = teamName != null ? teamName.hashCode() : 0;
+        result = 31 * result + (teamStatus != null ? teamStatus.hashCode() : 0);
+        return result;
+    }
+
     public WebTeam(Long id, String teamName) {
         this.id = id;
         this.teamName = teamName;
