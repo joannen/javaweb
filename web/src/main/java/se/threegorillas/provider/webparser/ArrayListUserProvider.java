@@ -87,8 +87,8 @@ public class ArrayListUserProvider implements  MessageBodyWriter<ArrayList<WebUs
             ArrayList<WebUser> webUsers = new ArrayList<>();
 
             while (iterator.hasNext()){
-                JsonElement json = iterator.next();
-                WebUser u = gson.fromJson(json, (Class<WebUser>)type);
+                JsonElement json = (JsonElement)iterator.next();
+                WebUser u = (WebUser)gson.fromJson(json, (Class<WebUser>)type);
                 webUsers.add(u);
             }
 

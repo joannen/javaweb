@@ -10,6 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -114,7 +115,7 @@ public final class TeamService extends AbstractService {
 
     @POST
     @Path("{id}/user")
-    public Response addUserToTeam(@PathParam("id") Long id, WebUser webUser){
+    public Response addUserToTeam(@PathParam("id") Long id, WebUser webUser) throws URISyntaxException {
         User u;
         if(service.findUserById(webUser.getId()) != null){
             u=service.findUserById(webUser.getId());
@@ -126,10 +127,14 @@ public final class TeamService extends AbstractService {
         team.addUser(u);
         service.saveUser(u);
         service.saveTeam(team);
+//        URI location = uriInfo.getAbsolutePathBuilder().path(u.getUserNumber()).build();
+        String baseUri = uriInfo.getBaseUri().toString();
+        String location = baseUri +"user"+"/"+u.getUserNumber();
 
-        URI location = uriInfo.getAbsolutePathBuilder().path(UserService.class, "getUser").build(u.getId());
 
-        return Response.created(location).build();
+//        URI location = uriInfo.getAbsolutePathBuilder().path(UserService.class, "getUser").build(u.getId());
+
+        return Response.created(new URI(location)).build();
     }
 
     @GET

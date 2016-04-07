@@ -62,15 +62,15 @@ public final class WebUser {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "WebUser{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", userNumber='" + userNumber + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "WebUser{" +
+//                "id=" + id +
+//                ", firstName='" + firstName + '\'' +
+//                ", lastName='" + lastName + '\'' +
+//                ", username='" + username + '\'' +
+//                ", password='" + password + '\'' +
+//                ", userNumber='" + userNumber + '\'' +
+//                '}';
+//    }
 }

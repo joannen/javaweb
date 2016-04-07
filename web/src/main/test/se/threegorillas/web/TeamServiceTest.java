@@ -4,8 +4,10 @@ import com.sun.deploy.util.SessionState;
 import org.junit.Before;
 import org.junit.Test;
 import se.threegorillas.provider.WebTeam;
+import se.threegorillas.provider.WebUser;
 import se.threegorillas.provider.webparser.ArrayListTeamProvider;
 import se.threegorillas.provider.webparser.TeamProvider;
+import se.threegorillas.provider.webparser.UserProvider;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -16,9 +18,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by joanne on 07/04/16.
@@ -30,7 +30,8 @@ public class TeamServiceTest {
 
     @Before
     public void setup(){
-        client = ClientBuilder.newClient().register(TeamProvider.class).register(ArrayListTeamProvider.class);
+        client = ClientBuilder.newClient().register(TeamProvider.class).register(ArrayListTeamProvider.class)
+                                          .register(UserProvider.class);
     }
 
     @Test
@@ -74,5 +75,23 @@ public class TeamServiceTest {
         System.out.println(getAllTeams.getUri());
         Collection<WebTeam> retrievedWebTeams = getAllTeams.request().get(ArrayList.class);
         assertTrue(retrievedWebTeams.size() > 1);
+    }
+
+    @Test
+    public void addUserToTeamAndGetAllUsersForTeam(){
+        WebTarget addUserToTeam = client.target(teamUrl).path("{id}/user");
+        WebUser webUser = new WebUser(1l, "fghj", "fghjk", "fghjm", "ghjm", "ghjkl");
+        WebTeam webTeam = new WebTeam(1L, "A-TEAM");
+
+        WebTarget savedTeam = client.target(teamUrl);
+        URI teamLocation = savedTeam.request().post(Entity.entity(webTeam, MediaType.APPLICATION_JSON_TYPE)).getLocation();
+        WebTarget getTeam = client.target(teamLocation);
+        WebTeam retrievedTeam = getTeam.request().get(WebTeam.class);
+        URI location = addUserToTeam.resolveTemplate("id",retrievedTeam.getId()).request().post(Entity.entity(webUser, MediaType.APPLICATION_JSON_TYPE)).getLocation();
+
+        WebTarget getUsersForTeam = addUserToTeam.resolveTemplate("id", retrievedTeam.getId());
+
+        Collection<WebUser> usersForTeam = getUsersForTeam.request().get(ArrayList.class);
+        assertTrue(usersForTeam.size()>0);
     }
 }
