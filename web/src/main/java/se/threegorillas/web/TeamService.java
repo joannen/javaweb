@@ -29,7 +29,7 @@ public final class TeamService extends AbstractService {
 
         Team saveTeam = service.saveTeam(team);
 
-        URI location = uriInfo.getAbsolutePathBuilder().path(saveTeam.getId().toString()).build();
+        URI location = uriInfo.getAbsolutePathBuilder().path(saveTeam.getId().toString()).build(saveTeam.getId());
 
         return Response.created(location).build();
     }
@@ -59,7 +59,8 @@ public final class TeamService extends AbstractService {
     }
 
     @GET
-    public Response getAllTeams(){
+//    public Response getAllTeams(){
+    public Collection<WebTeam> getAllTeams(){
 
         List<Team> teams = (List<Team>) service.getAllTeams();
 
@@ -70,7 +71,7 @@ public final class TeamService extends AbstractService {
 
         List<WebTeam> webTeams = teams.stream().map(t -> new WebTeam(t.getId(), t.getTeamName(), t.getTeamStatus())).collect(Collectors.toList());
 
-        return Response.ok(webTeams).build();
+        return webTeams;
 
     }
 
