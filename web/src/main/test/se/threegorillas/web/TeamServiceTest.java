@@ -4,9 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import se.threegorillas.model.WebTeam;
 import se.threegorillas.model.WebUser;
-import se.threegorillas.provider.webparser.ArrayListTeamProvider;
-import se.threegorillas.provider.webparser.TeamProvider;
-import se.threegorillas.provider.webparser.UserProvider;
+import se.threegorillas.model.WebWorkItem;
+import se.threegorillas.provider.webparser.*;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -30,7 +29,7 @@ public class TeamServiceTest {
     @Before
     public void setup(){
         client = ClientBuilder.newClient().register(TeamProvider.class).register(ArrayListTeamProvider.class)
-                                          .register(UserProvider.class);
+                                          .register(UserProvider.class).register(ArrayListWorkItemProvider.class).register(WorkItemProvider.class);
     }
 
     @Test
@@ -81,16 +80,13 @@ public class TeamServiceTest {
         URI teamLocation = savedTeam.request().post(Entity.entity(webTeam, MediaType.APPLICATION_JSON_TYPE)).getLocation();
         WebTarget getTeam = client.target(teamLocation);
         WebTeam retrievedTeam = getTeam.request().get(WebTeam.class);
-
         WebTarget getUsersForTeam = addUserToTeam.resolveTemplate("id", retrievedTeam.getId());
+
+        int addedUserStatus = getUsersForTeam.request().post(Entity.entity(webUser, MediaType.APPLICATION_JSON_TYPE)).getStatus();
+        assertEquals(addedUserStatus, 201);
+
 
         Collection<WebUser> usersForTeam = getUsersForTeam.request().get(ArrayList.class);
         assertTrue(usersForTeam.size()>0);
     }
-
-    @Test
-    public void getWorkItemsForTeam(){
-
-    }
-
 }
