@@ -29,11 +29,13 @@ public class WorkItemServiceTest {
     private final String url = "http://localhost:8080/web/workitem";
     private Client client;
     private WebTarget postWorkItem;
+    private WebTarget searchForWorkItem;
 
     @Before
     public void setup(){
         client = ClientBuilder.newClient().register(WorkItemProvider.class).register(ArrayListWorkItemProvider.class);
         postWorkItem = client.target(url);
+        searchForWorkItem = client.target(url).path("search");
 
     }
 
@@ -100,6 +102,13 @@ public class WorkItemServiceTest {
 
         System.out.println(updatedWorkItem);
 
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForWorkItemByDescription(){
+        WebTarget searchTarget = searchForWorkItem.queryParam("query", "hund");
+        Collection<WebWorkItem> webWorkItems = searchTarget.request().get(ArrayList.class);
+        assertTrue(webWorkItems.size()> 0);
     }
 
 
