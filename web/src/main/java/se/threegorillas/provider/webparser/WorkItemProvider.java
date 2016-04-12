@@ -54,7 +54,6 @@ public final class WorkItemProvider implements MessageBodyReader<WebWorkItem>, M
 
         @Override
         public WebWorkItem deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-
             JsonObject workItemJson = jsonElement.getAsJsonObject();
 
             Long id = workItemJson.get("id").getAsLong();
@@ -63,13 +62,11 @@ public final class WorkItemProvider implements MessageBodyReader<WebWorkItem>, M
             if (workItemJson.has("status")){
                 status = workItemJson.get("status").getAsString();
             }
-
             return new WebWorkItem.Builder(id, description).withStatus(status).build();
         }
 
-
+        @Override
         public JsonElement serialize(WebWorkItem webWorkItem, Type type, JsonSerializationContext jsonSerializationContext) {
-
             String issue = webWorkItem.getIssueDescription();
             JsonObject json = new JsonObject();
             json.addProperty("id", webWorkItem.getId());

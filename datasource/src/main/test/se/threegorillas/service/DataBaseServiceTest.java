@@ -48,27 +48,22 @@ public class DataBaseServiceTest {
 
     @Before
     public void setup() {
-
         user1 = new User("user1", "fredrik", "k", "abc", "12");
         user2 = new User("user2", "anna", "a", "123", "10");
         workItem = new WorkItem("CLEAN KITCHEN!!!");
         team = new Team("dreamteam");
         issue = new Issue("kitchen is still dirty!!!");
-
     }
 
     @After
     public void destroy() {
-
         userRepository.findAll().forEach(user -> userRepository.delete(user));
         workItemRepository.findAll().forEach(workItem -> workItemRepository.delete(workItem));
         teamRepository.findAll().forEach(team -> teamRepository.delete(team));
-
     }
 
     @Test
     public void workItemShouldBeAddedToUser() {
-
         User user = service.saveUser(user1);
         WorkItem savedWorkItem = service.saveWorkItem(workItem);
         user.addWorkItem(savedWorkItem);
@@ -78,15 +73,12 @@ public class DataBaseServiceTest {
         User retrieved = service.findUserByUsername(userWithWorkItem.getUserName());
 
         assertTrue(retrieved.getWorkItems().size() > 0);
-
     }
 
     @Test
     public void userShouldBeAddedToTeam() {
-
         Team savedTeam = service.saveTeam(team);
         assertNotNull(savedTeam);
-
         User savedUser = service.saveUser(user1);
 
         savedTeam.addUser(savedUser);
@@ -94,28 +86,22 @@ public class DataBaseServiceTest {
         Team savedWithUser = service.saveTeam(savedTeam);
 
         assertNotNull(savedWithUser);
-
         Team teamById = service.findByTeamName(savedWithUser.getTeamName());
-
         assertTrue(teamById.getUsers().size() > 0);
-
     }
 
     @Test
     public void workItemStatusShouldBeChanged() {
-
         WorkItem savedWorkItem = service.saveWorkItem(workItem);
         assertTrue(savedWorkItem.getStatus().equals(Status.UNSTARTED));
         user1.addWorkItem(savedWorkItem);
         service.saveWorkItem(savedWorkItem);
         service.saveUser(user1);
         assertTrue(service.findWorkItemById(savedWorkItem.getId()).getStatus().equals(Status.STARTED));
-
     }
 
     @Test
     public void inActivatedUserShouldMakeWorkItemsUnstarted() {
-
         User savedUser = service.saveUser(user1);
         assertTrue(service.findUserById(savedUser.getId()).getUserStatus().equals(Status.ACTIVE));
         WorkItem savedWorkItem = service.saveWorkItem(workItem);
@@ -128,12 +114,10 @@ public class DataBaseServiceTest {
         inactiveUser.setStatusInactive();
         service.saveUser(inactiveUser);
         assertTrue(service.findWorkItemById(savedWorkItem.getId()).getStatus().equals(Status.UNSTARTED));
-
     }
 
     @Test
     public void issueShouldBeAddedToWorkItem() {
-
         WorkItem savedWorkItem = service.saveWorkItem(workItem);
         assertNull(savedWorkItem.getIssue());
         WorkItem retrievedItem = service.findWorkItemById(savedWorkItem.getId());
@@ -141,12 +125,10 @@ public class DataBaseServiceTest {
         WorkItem workItemWithIssue = service.saveWorkItem(retrievedItem);
 
         assertEquals(issue, service.findWorkItemById(workItemWithIssue.getId()).getIssue());
-
     }
 
     @Test
     public void getWorkItemsWithIssueForUser() {
-
         User savedUser = service.saveUser(user2);
         savedUser.addWorkItem(workItem);
         workItem.setIssue(issue);

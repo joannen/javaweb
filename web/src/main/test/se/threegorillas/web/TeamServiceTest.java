@@ -35,7 +35,6 @@ public class TeamServiceTest {
 
     @Test
     public void shouldBeAbleToCreateTeam(){
-
         WebTeam team = new WebTeam(1L, "dreamteam");
         WebTarget teamTarget = client.target(teamUrl);
 
@@ -53,7 +52,6 @@ public class TeamServiceTest {
 
         URI location = teamTarget.request().post(Entity.entity(team, MediaType.APPLICATION_JSON_TYPE)).getLocation();
 
-        WebTarget getTeamById = client.target(location);
         WebTeam retrievedTeam = client.target(location).request().get(WebTeam.class);
 
         assertEquals(team, retrievedTeam);
@@ -63,15 +61,12 @@ public class TeamServiceTest {
         int status = client.target(location).request()
                                            .put(Entity.entity(updatedTeam, MediaType.APPLICATION_JSON_TYPE))
                                             .getStatus();
-
         assertEquals(204, status);
-
     }
 
     @Test
     public void getAllTeams() {
         WebTarget getAllTeams = client.target(teamUrl);
-        System.out.println(getAllTeams.getUri());
         Collection<WebTeam> retrievedWebTeams = getAllTeams.request().get(ArrayList.class);
         assertTrue(retrievedWebTeams.size() > 1);
     }
@@ -86,7 +81,6 @@ public class TeamServiceTest {
         URI teamLocation = savedTeam.request().post(Entity.entity(webTeam, MediaType.APPLICATION_JSON_TYPE)).getLocation();
         WebTarget getTeam = client.target(teamLocation);
         WebTeam retrievedTeam = getTeam.request().get(WebTeam.class);
-        URI location = addUserToTeam.resolveTemplate("id",retrievedTeam.getId()).request().post(Entity.entity(webUser, MediaType.APPLICATION_JSON_TYPE)).getLocation();
 
         WebTarget getUsersForTeam = addUserToTeam.resolveTemplate("id", retrievedTeam.getId());
 
@@ -97,8 +91,6 @@ public class TeamServiceTest {
     @Test
     public void getWorkItemsForTeam(){
 
-
     }
 
-   
 }

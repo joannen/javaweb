@@ -23,7 +23,6 @@ public final class WorkItemService extends AbstractService {
     @GET
     @Path("/sample")
     public Response sampleWorkItem() {
-
         Issue issue = new Issue("things are not done");
         WebWorkItem webWorkItem = new WebWorkItem.Builder(1L, "do some things").withAssignedUserName("froanne").withIssue(issue.getIssueDescription()).withStatus(Status.UNSTARTED).build();
 
@@ -35,11 +34,9 @@ public final class WorkItemService extends AbstractService {
         List<WorkItem> workItems = (List) service.getAllWorkItems();
 
         if (null == status) {
-
             Collection<WebWorkItem> webWorkItems = workItems.stream()
                     .map(w -> toWebWorkItem(w))
                     .collect(Collectors.toList());
-
             return Response.ok(webWorkItems).build();
         } else {
             return Response.ok(getWorkItemsByStatus(status)).build();
@@ -62,7 +59,6 @@ public final class WorkItemService extends AbstractService {
         if (saved == null) {
             throw new WebApplicationException("could not saveWorkItem workitem");
         }
-
         URI location = uriInfo.getAbsolutePathBuilder().path(WorkItemService.class, "getOneWorkItem").build(saved.getId());
 
         return Response.created(location).build();
@@ -71,7 +67,6 @@ public final class WorkItemService extends AbstractService {
     @PUT
     @Path("{id}/status")
     public Response updateWorkItemStatus(@PathParam("id") Long id, String status) {
-
         WorkItem item = service.findWorkItemById(id);
         item.setStatus(status);
 
@@ -102,16 +97,13 @@ public final class WorkItemService extends AbstractService {
     @DELETE
     @Path("{id}")
     public Response deleteWorkItem(@PathParam("id") Long id) {
-
         WorkItem workItem = service.findWorkItemById(id);
         service.deleteWorkItem(id);
         return Response.noContent().build();
-
     }
 
     @OPTIONS
     public Response allowedMethods() {
-
         return Response.noContent()
                 .allow("GET", "POST", "PUT", "DELETE")
                 .header("Content-Length", 0)
@@ -126,7 +118,6 @@ public final class WorkItemService extends AbstractService {
         if (workItem == null) {
             return Response.status(404).build();
         }
-
         if (workItem.getIssue() == null) {
             return Response.status(404).build();
         }
@@ -147,13 +138,9 @@ public final class WorkItemService extends AbstractService {
         if (workItem1 == null) {
             throw new InvalidIssueException("Could not save workitem with id: " + workItem1.getId() + ", invalid issue posted");
         }
-
         URI location = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "getOneWorkItem").build(workItem1.getId());
 
         return Response.created(location).build();
-
     }
-
-
 
 }

@@ -27,9 +27,7 @@ public final class TeamService extends AbstractService {
     @POST
     public Response createTeam(WebTeam webTeam){
         Team team = new Team(webTeam.getTeamName());
-
         Team saveTeam = service.saveTeam(team);
-
         URI location = uriInfo.getAbsolutePathBuilder().path(saveTeam.getId().toString()).build(saveTeam.getId());
 
         return Response.created(location).build();
@@ -38,7 +36,6 @@ public final class TeamService extends AbstractService {
     @GET
     @Path("/sample")
     public Response sampleTeam(){
-
         WebTeam sampleTeam = new WebTeam(1L, "MasterTeam", "Active");
 
         return Response.ok(sampleTeam).build();
@@ -47,9 +44,7 @@ public final class TeamService extends AbstractService {
     @GET
     @Path("{id}")
     public Response getTeam(@PathParam("id") Long id){
-
         Team team = service.findTeamById(id);
-
         WebTeam webTeam = toWebTeam(team);
 
         return Response.ok(webTeam).build();
@@ -57,9 +52,7 @@ public final class TeamService extends AbstractService {
 
     @GET
     public Collection<WebTeam> getAllTeams(){
-
         List<Team> teams = (List<Team>) service.getAllTeams();
-
         List<WebTeam> webTeams = teams.stream().map(t -> toWebTeam(t)).collect(Collectors.toList());
 
         return webTeams;
@@ -68,18 +61,13 @@ public final class TeamService extends AbstractService {
     @PUT
     @Path("{id}")
     public Response updateTeam(@PathParam("id") Long id, WebTeam team){
-
         Team t = new Team(team.getId(), team.getTeamName(), team.getTeamStatus());
-
         boolean teamExist = service.teamExists(t);
         Team savedTeam = service.saveTeam(t);
 
         if(teamExist){
-
             return Response.noContent().build();
-
         } else {
-
             URI location = uriInfo.getAbsolutePathBuilder()
                     .path(TeamService.class, "getTeam")
                     .build(savedTeam.getId());
@@ -91,9 +79,7 @@ public final class TeamService extends AbstractService {
     @DELETE
     @Path("{id}")
     public Response removeTeam(@PathParam("id") Long id){
-
         Team team = service.findTeamById(id);
-
         service.removeTeam(id);
 
         return Response.noContent().build();
@@ -103,6 +89,7 @@ public final class TeamService extends AbstractService {
     @Path("{id}/user")
     public Response addUserToTeam(@PathParam("id") Long id, WebUser webUser) throws URISyntaxException {
         User u;
+
         if(service.findUserById(webUser.getId()) != null){
             u=service.findUserById(webUser.getId());
         }else{
@@ -113,12 +100,8 @@ public final class TeamService extends AbstractService {
         team.addUser(u);
         service.saveUser(u);
         service.saveTeam(team);
-//        URI location = uriInfo.getAbsolutePathBuilder().path(u.getUserNumber()).build();
         String baseUri = uriInfo.getBaseUri().toString();
         String location = baseUri +"user"+"/"+u.getUserNumber();
-
-
-//        URI location = uriInfo.getAbsolutePathBuilder().path(UserService.class, "getUser").build(u.getId());
 
         return Response.created(new URI(location)).build();
     }
@@ -134,7 +117,6 @@ public final class TeamService extends AbstractService {
         return webUsers;
     }
 
-
     @GET
     @Path("{id}/workitem")
     public Collection<WebWorkItem> getAllWorkItemsForTeam(@PathParam("id") Long id){
@@ -144,6 +126,7 @@ public final class TeamService extends AbstractService {
         users.forEach(u -> u.getWorkItems().forEach(w -> webWorkItems.add(toWebWorkItem(w))));
         return webWorkItems;
     }
+
 }
 
 

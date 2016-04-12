@@ -23,7 +23,6 @@ public class UserServiceTest {
 
     private final String userUrl = "http://localhost:8080/web/user";
     private final String teamUrl = "http://localhost:8080/web/team";
-    private final String workItemUrl = "http://localhost:8080/web/user";
     private Client client;
     private WebTarget sampleUser;
     private WebTarget postUser;
@@ -42,7 +41,6 @@ public class UserServiceTest {
         getAllUsers =client.target(userUrl);
         searchForUsers= client.target(userUrl).path("search");
         searchForUsersByTeam = client.target(teamUrl).path("{id}/user");
-
     }
 
 
@@ -54,7 +52,6 @@ public class UserServiceTest {
 
     @Test
     public void sampleUserIsCorrectlyMapped() {
-//        WebUser user = sampleUser.register(UserProvider.class).request(MediaType.APPLICATION_JSON_TYPE)
         WebUser user = sampleUser.request(MediaType.APPLICATION_JSON_TYPE)
                                  .get(WebUser.class);
 
@@ -70,7 +67,6 @@ public class UserServiceTest {
         WebTarget getUserWithId = client.target(location);
         WebUser retrievedUser = getUserWithId.request().get(WebUser.class);
         assertEquals(userToSave, retrievedUser);
-
     }
 
     @Test
@@ -101,7 +97,6 @@ public class UserServiceTest {
 
     @Test
     public void shouldBeAbleToSearchForUsers(){
-
         WebTarget search = searchForUsers.queryParam("query","cde");
         Collection<WebUser> webUsers = search.request().get(ArrayList.class);
         System.out.println(webUsers);
@@ -114,20 +109,9 @@ public class UserServiceTest {
         WebUser userToSave = new WebUser(1L, "abc", "abc", "abc", "abc", "102200010004020009980", "0");
         URI location = postUser.request().post(Entity.entity(userToSave, MediaType.APPLICATION_JSON_TYPE)).getLocation();
         WebTarget getUserWithId = client.target(location);
-        System.out.println(location);
 
         WebTarget userWorkItem= client.target(location).path("workitem");
-        System.out.println(userWorkItem.getUri());
         URI itemlocation = userWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getLocation();
-//        int status = userWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getStatus();
-        System.out.println(itemlocation);
     }
-
-
-
-
-
-
-
 
 }

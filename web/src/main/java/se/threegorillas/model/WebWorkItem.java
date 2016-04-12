@@ -11,7 +11,6 @@ public final class WebWorkItem {
     private final String status;
 
     public WebWorkItem(Builder builder){
-
         this.id = builder.id;
         this.description =builder.description;
         this.assignedUsername = builder.assignedUserName;
@@ -41,7 +40,6 @@ public final class WebWorkItem {
 
     @Override
     public String toString() {
-
         return "WebWorkItem{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
@@ -49,19 +47,16 @@ public final class WebWorkItem {
                 ", issueDescription='" + issueDescription + '\'' +
                 ", status='" + status + '\'' +
                 '}';
-
     }
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         WebWorkItem that = (WebWorkItem) o;
 
         return !(description != null ? !description.equals(that.description) : that.description != null);
-
     }
 
     @Override
@@ -92,6 +87,7 @@ public final class WebWorkItem {
             this.issue=issue;
             return this;
         }
+
         public Builder withStatus(String status) {
             this.status = status;
             return this;
@@ -100,7 +96,6 @@ public final class WebWorkItem {
         public WebWorkItem build(){
             return new WebWorkItem(this);
         }
-
     }
 
 }

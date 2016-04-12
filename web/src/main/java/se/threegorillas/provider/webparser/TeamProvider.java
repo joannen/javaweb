@@ -50,7 +50,6 @@ public class TeamProvider implements MessageBodyReader<WebTeam>, MessageBodyWrit
 
     @Override
     public void writeTo(WebTeam webTeam, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> multivaluedMap, OutputStream outputStream) throws IOException, WebApplicationException {
-
         try(JsonWriter writer = new JsonWriter(new OutputStreamWriter(outputStream))){
             gson.toJson(webTeam, WebTeam.class, writer);
         }

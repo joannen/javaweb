@@ -80,10 +80,6 @@ public class DataBaseService {
         return workItem;
     }
 
-//    public boolean workItemExists(WorkItem workItem) {
-//        return workItemRepository.findOne(workItem.getId()) != null;
-//    }
-
     public Collection<WorkItem> getAllWorkItems() {
         return workItemRepository.findAll();
     }

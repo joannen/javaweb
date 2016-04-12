@@ -16,4 +16,5 @@ public class DeleteExceptionMapper  implements ExceptionMapper<DeleteException> 
     public Response toResponse(DeleteException e) {
         return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
     }
+
 }

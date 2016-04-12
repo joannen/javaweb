@@ -13,11 +13,11 @@ public class WorkItem extends AbstractEntity {
     @Column(nullable = false)
     private String status;
 
-    @Embedded
-    private Issue issue;
-
     @Column
     private String assignedUsername;
+
+    @Embedded
+    private Issue issue;
 
     protected WorkItem(){}
 
@@ -25,18 +25,6 @@ public class WorkItem extends AbstractEntity {
         this.description = description;
         this.status = Status.UNSTARTED;
     }
-
-//   public WorkItem(Long id, String description){
-//       this.id = id;
-//       this.description = description;
-//       this.status = Status.UNSTARTED;
-//    }
-//
-//    public WorkItem(Long id, String description, String status){
-//        this.id =id;
-//        this.description = description;
-//        this.status = status;
-//    }
 
     public String getAssignedUsername() {
         return assignedUsername;
@@ -53,10 +41,6 @@ public class WorkItem extends AbstractEntity {
     public String getDescription() {
         return description;
     }
-
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
 
     public String getStatus(){ return status;}
 

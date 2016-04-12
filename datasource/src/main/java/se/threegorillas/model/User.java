@@ -157,4 +157,5 @@ public class User extends AbstractEntity {
 				", team=" + team +
 				'}';
 	}
+
 }

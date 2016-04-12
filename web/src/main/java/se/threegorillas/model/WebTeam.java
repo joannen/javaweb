@@ -9,19 +9,15 @@ public final class WebTeam {
     private final String teamStatus;
 
     public WebTeam(Long id, String teamName, String teamStatus){
-
         this.id=id;
         this.teamName = teamName;
         this.teamStatus = teamStatus;
-
     }
 
     public WebTeam(Long id, String teamName) {
-
         this.id = id;
         this.teamName = teamName;
         this.teamStatus = Status.ACTIVE;
-
     }
 
     public String getTeamName() {
@@ -45,27 +41,22 @@ public final class WebTeam {
 
         if (teamName != null ? !teamName.equals(webTeam.teamName) : webTeam.teamName != null) return false;
         return !(teamStatus != null ? !teamStatus.equals(webTeam.teamStatus) : webTeam.teamStatus != null);
-
     }
 
     @Override
     public int hashCode() {
-
         int result = teamName != null ? teamName.hashCode() : 0;
         result = 31 * result + (teamStatus != null ? teamStatus.hashCode() : 0);
         return result;
-
     }
 
     @Override
     public String toString() {
-
         return "WebTeam{" +
                 "id=" + id +
                 ", teamName='" + teamName + '\'' +
                 ", teamStatus='" + teamStatus + '\'' +
                 '}';
-
     }
 
 }

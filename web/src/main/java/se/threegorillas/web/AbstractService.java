@@ -32,15 +32,13 @@ public abstract class AbstractService {
     }
 
     protected WebUser toWebUser(User user){
-
         WebUser webUser = new WebUser(user.getId(), user.getFirstName(), user.getLastName(),
                 user.getUserName(), user.getPassword(), user.getUserNumber(), user.getUserStatus());
-        return webUser;
 
+        return webUser;
     }
 
     protected WebWorkItem toWebWorkItem(WorkItem workItem){
-
         boolean hasIssue = workItem.getIssue() != null;
 
         WebWorkItem webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription())

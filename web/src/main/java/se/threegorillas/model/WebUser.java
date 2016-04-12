@@ -12,7 +12,6 @@ public final class WebUser {
 
 
     public WebUser(Long id, String firstName, String lastName, String username, String password, String userNumber, String status) {
-
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -20,7 +19,6 @@ public final class WebUser {
         this.password = password;
         this.userNumber = userNumber;
         this.status = status;
-
     }
 
     public String getUsername() {
@@ -53,7 +51,6 @@ public final class WebUser {
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -61,7 +58,6 @@ public final class WebUser {
 
         if (username != null ? !username.equals(webUser.username) : webUser.username != null) return false;
         return !(userNumber != null ? !userNumber.equals(webUser.userNumber) : webUser.userNumber != null);
-
     }
 
     @Override
@@ -73,7 +69,6 @@ public final class WebUser {
 
     @Override
     public String toString() {
-
         return "WebUser{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +

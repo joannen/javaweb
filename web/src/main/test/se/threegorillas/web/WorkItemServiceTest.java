@@ -36,22 +36,18 @@ public class WorkItemServiceTest {
         client = ClientBuilder.newClient().register(WorkItemProvider.class).register(ArrayListWorkItemProvider.class);
         postWorkItem = client.target(url);
         searchForWorkItem = client.target(url).path("search");
-
     }
 
     @Test
     public void shouldBeAbleToAddWorkItem(){
-
         WebWorkItem webWorkItem = new WebWorkItem.Builder(1L, "klean kitchen").build();
 
         URI location = postWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getLocation();
-
 
         WebTarget getWorkItem = client.target(location);
         WebWorkItem item = getWorkItem.request().get(WebWorkItem.class);
 
         assertEquals(item, webWorkItem);
-
     }
 
     @Test
@@ -94,10 +90,7 @@ public class WorkItemServiceTest {
         WebTarget postIssueToWorkItem = client.target(location).path("issue");
 
         Issue issue = new Issue("Joanne har ingen hund");
-
-//        URI updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issue.getIssueDescription(), MediaType.APPLICATION_JSON_TYPE)).getLocation();
         String updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issue.getIssueDescription(), MediaType.APPLICATION_JSON_TYPE)).readEntity(String.class);
-
     }
 
     @Test
@@ -106,6 +99,5 @@ public class WorkItemServiceTest {
         Collection<WebWorkItem> webWorkItems = searchTarget.request().get(ArrayList.class);
         assertTrue(webWorkItems.size()> 0);
     }
-
 
 }

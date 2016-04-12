@@ -30,51 +30,38 @@ public class ArrayListUserProvider implements  MessageBodyWriter<ArrayList<WebUs
 
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
-
         return aClass.isAssignableFrom(ArrayList.class);
-
     }
 
     @Override
     public long getSize(ArrayList<WebUser> webUsers, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
-
         return 0;
-
     }
 
     @Override
     public void writeTo(ArrayList<WebUser> webUsers, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> multivaluedMap, OutputStream outputStream) throws IOException, WebApplicationException {
-
         try(JsonWriter writer = new JsonWriter(new OutputStreamWriter(outputStream))) {
-
             gson.toJson(webUsers, ArrayList.class, writer);
-
         }
     }
 
     @Override
     public boolean isReadable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
-
         return aClass.isAssignableFrom(ArrayList.class);
-
     }
 
     @Override
     public ArrayList<WebUser> readFrom(Class<ArrayList<WebUser>> aClass, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> multivaluedMap, InputStream inputStream) throws IOException, WebApplicationException {
-
         return gson.fromJson(new InputStreamReader(inputStream), ArrayList.class);
-
     }
 
     private static final class ArrayListUserAdapter implements JsonSerializer<ArrayList<WebUser>>, JsonDeserializer<ArrayList<WebUser>>{
 
         @Override
         public JsonElement serialize(ArrayList<WebUser> webUsers, Type type, JsonSerializationContext jsonSerializationContext) {
-
             JsonArray jsonArray = new JsonArray();
 
             for (WebUser webUser:webUsers) {
-
                 JsonObject json2 = new JsonObject();
                 json2.addProperty("id",webUser.getId());
                 json2.addProperty("firstName", webUser.getFirstName());
@@ -83,15 +70,12 @@ public class ArrayListUserProvider implements  MessageBodyWriter<ArrayList<WebUs
                 json2.addProperty("password", webUser.getPassword());
                 json2.addProperty("userNumber", webUser.getUserNumber());
                 jsonArray.add(json2);
-
             }
-
             return jsonArray;
         }
 
         @Override
         public ArrayList<WebUser> deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-
             JsonArray jArray = jsonElement.getAsJsonArray();
             Iterator<JsonElement> iterator = jArray.iterator();
             ArrayList<WebUser> webUsers = new ArrayList<>();
@@ -101,7 +85,6 @@ public class ArrayListUserProvider implements  MessageBodyWriter<ArrayList<WebUs
                 WebUser u = gson.fromJson(json, (Class<WebUser>)type);
                 webUsers.add(u);
             }
-
             return webUsers;
         }
 

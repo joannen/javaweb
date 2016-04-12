@@ -44,7 +44,6 @@ public final class UserService extends AbstractService{
     @GET
     @Path("/sample")
     public Response sampleUser() {
-
         WebUser user = new WebUser(1L, "joanne", "nori", "fghj", "sdfghjkl", "1234", "0");
 
         return Response.ok(user).build();
@@ -55,25 +54,24 @@ public final class UserService extends AbstractService{
         User u = new User(user.getUsername(), user.getFirstName(), user.getLastName(), user.getPassword(), user.getUserNumber());
         User savedUser = service.saveUser(u);
         URI location = uriInfo.getAbsolutePathBuilder().path(savedUser.getUserNumber()).build();
+
         return Response.created(location).build();
     }
 
     @PUT
     @Path("{usernumber}/status")
-        public Response updateUserStatus(@PathParam("usernumber") String usernumber, String status) {
+    public Response updateUserStatus(@PathParam("usernumber") String usernumber, String status) {
+        User user = service.findUserByUserNumber(usernumber);
+        user.setUserStatus(status);
 
-            User user = service.findUserByUserNumber(usernumber);
-            user.setUserStatus(status);
+        User savedUser = service.saveUser(user);
 
-           User savedUser = service.saveUser(user);
-
-            return Response.ok().build();
+        return Response.ok().build();
     }
 
     @PUT
     @Path("{userNumber}")
     public Response updateUser(@PathParam("userNumber") String userNumber, WebUser webUser) {
-
         User userToSave = new User(webUser.getId(), webUser.getUsername(), webUser.getFirstName(), webUser.getLastName(), webUser.getPassword(), webUser.getUserNumber());
         service.saveUser(userToSave);
 
@@ -112,7 +110,6 @@ public final class UserService extends AbstractService{
         String location = baseUri +"workitem/"+ w.getId();
 
         return Response.created(new URI(location)).build();
-
     }
 
     @GET
