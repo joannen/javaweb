@@ -28,40 +28,25 @@ import java.util.stream.Collectors;
 @Path("/user")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public final class UserService {
+public final class UserService extends AbstractService{
 
-    @Context
-    private ServletContext context;
 
-    @Context
-    private UriInfo uriInfo;
-
-    private DataBaseService service;
-
-    @PostConstruct
-    public void setupService() {
-        service = (DataBaseService) context.getAttribute("database");
-    }
 
     @GET
     @Path("{userNumber}")
     public WebUser getUser(@PathParam("userNumber") String usernumber) {
         User user = service.findUserByUserNumber(usernumber);
 
-        WebUser webUser = new WebUser(user.getId(), user.getFirstName(), user.getLastName(),
-                user.getUserName(), user.getPassword(), user.getUserNumber());
-        return webUser;
-
-
+        return toWebUser(user);
     }
+
 
     @GET
     public Collection<WebUser> getAllUsers() {
         Collection<WebUser> webUsers = new ArrayList<>();
         Collection<User> users = service.getAllUsers();
 
-        users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(),
-                u.getUserName(), u.getPassword(), u.getUserNumber())));
+        users.forEach(u -> webUsers.add(toWebUser(u)));
 
         return webUsers;
     }
@@ -86,7 +71,6 @@ public final class UserService {
     @PUT
     @Path("{userNumber}")
     public Response updateUser(@PathParam("userNumber") String userNumber, WebUser webUser) {
-        User user = service.findUserByUserNumber(userNumber);
         User userToSave = new User(webUser.getId(), webUser.getUsername(), webUser.getFirstName(), webUser.getLastName(), webUser.getPassword(), webUser.getUserNumber());
         service.saveUser(userToSave);
 
@@ -94,15 +78,12 @@ public final class UserService {
     }
 
     @GET
-    @Path("{id}/workitem")
-    public Collection<WebWorkItem> getAllWorkItemsForOneUser(@PathParam("id") Long id) {
-        User u = service.findUserById(id);
+    @Path("{usernumber}/workitem")
+    public Collection<WebWorkItem> getAllWorkItemsForOneUser(@PathParam("usernumber") String usernumber) {
+        User u = service.findUserByUserNumber(usernumber);
 
         Collection<WebWorkItem> webWorkItems = u.getWorkItems().stream()
-
                 .map(w -> new WebWorkItem.Builder(w.getId(), w.getDescription()).withAssignedUserName(w.getAssignedUsername()).build())
-
-
                 .collect(Collectors.toList());
 
         return webWorkItems;
@@ -113,10 +94,16 @@ public final class UserService {
     public Response addWorkItemToUser(@PathParam("id") String userNumber, WebWorkItem webWorkItem) throws URISyntaxException {
         User u = service.findUserByUserNumber(userNumber);
         WorkItem w;
-        if (service.findWorkItemById(webWorkItem.getId()) != null) {
-            w = service.findWorkItemById(webWorkItem.getId());
+//        if (service.findWorkItemById(webWorkItem.getId()) != null) {
+//            w = service.findWorkItemById(webWorkItem.getId());
+//
+//        } else {
+//            w = new WorkItem(webWorkItem.getDescription());
+//        }
 
-        } else {
+        try{
+            w = service.findWorkItemById(webWorkItem.getId());
+        } catch (EntityNotFoundException e){
             w = new WorkItem(webWorkItem.getDescription());
         }
 
@@ -125,11 +112,9 @@ public final class UserService {
         service.saveUser(u);
 
         String baseUri = uriInfo.getBaseUri().toString();
-        System.out.println(baseUri);
         String location = baseUri +"workitem/"+ w.getId();
 
 //        URI location = uriInfo.getAbsolutePathBuilder().path(WorkItemService.class, "getOneWorkItem").build(w.getId());
-        System.out.println(location);
 
         return Response.created(new URI(location)).build();
 

@@ -44,20 +44,20 @@ public final class TeamService extends AbstractService {
         return Response.ok(sampleTeam).build();
     }
 
-    @GET
-    @Path("{id}")
-    public Response getTeam(@PathParam("id") Long id){
-
-        Team team = service.findTeamById(id);
-
-        if(team == null){
-            throw new TeamNotFoundException(id);
-        }
-
-        WebTeam webTeam = new WebTeam(team.getId(), team.getTeamName(), team.getTeamStatus());
-
-        return Response.ok(webTeam).build();
-    }
+//    @GET
+//    @Path("{id}")
+//    public Response getTeam(@PathParam("id") Long id){
+//
+//        Team team = service.findTeamById(id);
+//
+//        if(team == null){
+//            throw new TeamNotFoundException(id);
+//        }
+//
+//        WebTeam webTeam = new WebTeam(team.getId(), team.getTeamName(), team.getTeamStatus());
+//
+//        return Response.ok(webTeam).build();
+//    }
 
     @GET
 //    public Response getAllTeams(){
@@ -76,76 +76,81 @@ public final class TeamService extends AbstractService {
 
     }
 
-    @PUT
+//    @PUT
+//    @Path("{id}")
+//    public Response updateTeam(@PathParam("id") Long id, WebTeam team){
+//
+//        Team t = new Team(team.getId(), team.getTeamName(), team.getTeamStatus());
+//
+//        boolean teamExist = service.teamExists(t);
+//        Team savedTeam = service.saveTeam(t);
+//
+//        if(teamExist){
+//            return Response.noContent().build();
+//        } else {
+//            URI location = uriInfo.getAbsolutePathBuilder()
+//                    .path(TeamService.class, "getTeam")
+//                    .build(savedTeam.getId());
+//
+//            return Response.created(location).build();
+//        }
+//
+//    }
+
+//    @DELETE
+//    @Path("{id}")
+//    public Response removeTeam(@PathParam("id") Long id){
+//
+//        Team team = service.findTeamById(id);
+//
+//        if(team == null){
+//            throw new TeamNotFoundException(id);
+//        }
+//
+//        service.removeTeam(id);
+//
+//        return Response.noContent().build();
+//
+//    }
+
+//    @POST
+//    @Path("{id}/user")
+//    public Response addUserToTeam(@PathParam("id") Long id, WebUser webUser) throws URISyntaxException {
+//        User u;
+//        if(service.findUserById(webUser.getId()) != null){
+//            u=service.findUserById(webUser.getId());
+//        }else{
+//            u = new User(webUser.getUsername(), webUser.getFirstName(), webUser.getLastName(), webUser.getPassword(), webUser.getUserNumber());
+//        }
+//
+//        Team team = service.findTeamById(id);
+//        team.addUser(u);
+//        service.saveUser(u);
+//        service.saveTeam(team);
+////        URI location = uriInfo.getAbsolutePathBuilder().path(u.getUserNumber()).build();
+//        String baseUri = uriInfo.getBaseUri().toString();
+//        String location = baseUri +"user"+"/"+u.getUserNumber();
+//
+//
+////        URI location = uriInfo.getAbsolutePathBuilder().path(UserService.class, "getUser").build(u.getId());
+//
+//        return Response.created(new URI(location)).build();
+//    }
+
+//    @GET
+//    @Path("{id}/user")
+//    public Collection<WebUser> getAllUsersForTeam(@PathParam("id") Long id){
+//        Collection<WebUser> webUsers= new ArrayList<>();
+//        Collection<User> users = service.findTeamById(id).getUsers();
+//
+//        users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(), u.getUserName(), u.getPassword(), u.getUserNumber())));
+//
+//        return webUsers;
+//    }
+
     @Path("{id}")
-    public Response updateTeam(@PathParam("id") Long id, WebTeam team){
-        
-        Team t = new Team(team.getId(), team.getTeamName(), team.getTeamStatus());
-
-        boolean teamExist = service.teamExists(t);
-        Team savedTeam = service.saveTeam(t);
-
-        if(teamExist){
-            return Response.noContent().build();
-        } else {
-            URI location = uriInfo.getAbsolutePathBuilder()
-                    .path(TeamService.class, "getTeam")
-                    .build(savedTeam.getId());
-
-            return Response.created(location).build();
-        }
-
-    }
-
-    @DELETE
-    @Path("{id}")
-    public Response removeTeam(@PathParam("id") Long id){
-
-        Team team = service.findTeamById(id);
-
-        if(team == null){
-            throw new TeamNotFoundException(id);
-        }
-
-        service.removeTeam(id);
-
-        return Response.noContent().build();
-
-    }
-
-    @POST
-    @Path("{id}/user")
-    public Response addUserToTeam(@PathParam("id") Long id, WebUser webUser) throws URISyntaxException {
-        User u;
-        if(service.findUserById(webUser.getId()) != null){
-            u=service.findUserById(webUser.getId());
-        }else{
-            u = new User(webUser.getUsername(), webUser.getFirstName(), webUser.getLastName(), webUser.getPassword(), webUser.getUserNumber());
-        }
-
-        Team team = service.findTeamById(id);
-        team.addUser(u);
-        service.saveUser(u);
-        service.saveTeam(team);
-//        URI location = uriInfo.getAbsolutePathBuilder().path(u.getUserNumber()).build();
-        String baseUri = uriInfo.getBaseUri().toString();
-        String location = baseUri +"user"+"/"+u.getUserNumber();
-
-
-//        URI location = uriInfo.getAbsolutePathBuilder().path(UserService.class, "getUser").build(u.getId());
-
-        return Response.created(new URI(location)).build();
-    }
-
-    @GET
-    @Path("{id}/user")
-    public Collection<WebUser> getAllUsersForTeam(@PathParam("id") Long id){
-        Collection<WebUser> webUsers= new ArrayList<>();
-        Collection<User> users = service.findTeamById(id).getUsers();
-
-        users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(), u.getUserName(), u.getPassword(), u.getUserNumber())));
-
-        return webUsers;
+    public TeamResource getTeamResource(){
+        return new TeamResource();
     }
 
 

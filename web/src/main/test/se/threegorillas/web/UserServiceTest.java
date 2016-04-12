@@ -117,7 +117,9 @@ public class UserServiceTest {
         System.out.println(location);
 
         WebTarget userWorkItem= client.target(location).path("workitem");
+        System.out.println(userWorkItem.getUri());
         URI itemlocation = userWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getLocation();
+//        int status = userWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getStatus();
         System.out.println(itemlocation);
     }
 

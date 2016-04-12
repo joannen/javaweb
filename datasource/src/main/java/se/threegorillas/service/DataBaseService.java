@@ -38,11 +38,28 @@ public class DataBaseService {
         return userRepository.findOne(id);
     }
 
-    public Collection<User> getAllUsers(){
-        return userRepository.findAll();
+    public Collection<User> getAllUsers(){return userRepository.findAll();}
+
+    public User findUserByUsername(String username){
+        User user = userRepository.findByUserName(username);
+        if (user==null){
+            throw new EntityNotFoundException("User with name: " + username + " not found");
+        }
+        return user;
     }
 
-    public User findUserByUsername(String username){ return userRepository.findByUserName(username);}
+    public User findUserByUserNumber(String usernumber) {
+        User user = userRepository.findByUserNumber(usernumber);
+        if(user==null){
+            throw new EntityNotFoundException("User with userNumber: " +usernumber +" not found");
+        }
+        return user;
+    }
+
+    public Collection<User> searchForUser(String search) {
+        String addedWildCards = "%" + search + "%";
+        return userRepository.findByUserNameOrLastNameOrFirstNameLike(addedWildCards);
+    }
 
 
     //WorkItem
@@ -51,7 +68,12 @@ public class DataBaseService {
     }
 
     public WorkItem findWorkItemById(Long id) {
-        return workItemRepository.findOne(id);
+
+        WorkItem workItem = workItemRepository.findOne(id);
+        if (workItem==null){
+            throw  new EntityNotFoundException("WorkItem with id: " + id + " not found");
+        }
+        return workItem;
     }
 
     public boolean workItemExists(WorkItem workItem) {
@@ -71,7 +93,14 @@ public class DataBaseService {
     //Team
     public Team saveTeam(Team team){ return teamRepository.save(team);}
 
-    public Team findTeamById(Long id){ return teamRepository.findOne(id); }
+    public Team findTeamById(Long id){
+        Team team = teamRepository.findOne(id);
+
+        if (team == null){
+            throw new EntityNotFoundException("Team with id: " + id + "could not be found.");
+        }
+        return team;
+    }
 
     public Collection<Team> getAllTeams(){return teamRepository.findAll();}
 
@@ -81,19 +110,13 @@ public class DataBaseService {
 
     public boolean teamExists(Team team){ return teamRepository.findOne(team.getId()) != null;}
 
-    public Team findByTeamName(String teamName) {return teamRepository.findByTeamName(teamName);}
-
-
-    public User findUserByUserNumber(String usernumber) {
-        User user = userRepository.findByUserNumber(usernumber);
-        if(user==null){
-            throw new EntityNotFoundException("User with userNumber: " +usernumber +" not found");
+    public Team findByTeamName(String teamName) {
+        Team team = teamRepository.findByTeamName(teamName);
+        if (team==null){
+            throw new EntityNotFoundException("team with name: " + teamName + " not found");
         }
-        return user;
+        return team;
+
     }
 
-    public Collection<User> searchForUser(String search) {
-        String addedWildCards = "%" + search + "%";
-        return userRepository.findByUserNameOrLastNameOrFirstNameLike(addedWildCards);
-    }
 }
