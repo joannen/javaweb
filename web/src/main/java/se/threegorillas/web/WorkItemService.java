@@ -29,19 +29,27 @@ public final class WorkItemService extends AbstractService {
     }
 
     @GET
-    public Response allWorkItems() {
+    public Response allWorkItems(@QueryParam("status") String status) {
         List<WorkItem> workItems = (List) service.getAllWorkItems();
         Collection<WebWorkItem> webWorkItems = new ArrayList<>();
 
-        for (WorkItem item : workItems) {
-            webWorkItems.add(new WebWorkItem.Builder(item.getId(), item.getDescription())
-                    .withAssignedUserName(item.getAssignedUsername())
-                    .withStatus(item.getStatus())
-                    .withIssue((item.getIssue() == null) ? null : item.getIssue().getIssueDescription())
-                    .build());
-        }
+        if (null == status) {
 
-        return Response.ok(webWorkItems).build();
+            for (WorkItem item : workItems) {
+                boolean hasIssue = item.getIssue() != null;
+                webWorkItems.add(
+                        new WebWorkItem.Builder(item.getId(), item.getDescription())
+                                .withAssignedUserName(item.getAssignedUsername())
+                                .withStatus(item.getStatus())
+                                .withIssue((hasIssue) ? item.getIssue().getIssueDescription() : null)
+                                .build()
+                );
+            }
+
+            return Response.ok(webWorkItems).build();
+        } else {
+            return Response.ok(getWorkItemsByStatus(status)).build();
+        }
     }
 
     @GET
@@ -77,10 +85,8 @@ public final class WorkItemService extends AbstractService {
 
         return Response.ok().build();
     }
-    
-    @GET
-    @Path("status")
-    public Collection<WebWorkItem> getWorkItemsByStatus(@QueryParam("status")String status){
+
+    public Collection<WebWorkItem> getWorkItemsByStatus(String status){
         Collection<WorkItem> workItems= service.getWorkItemsByStatus(status);
         Collection<WebWorkItem> webWorkItems = new ArrayList<>();
         workItems.forEach(w -> webWorkItems.add(toWebWorkItem(w)));

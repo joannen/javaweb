@@ -13,7 +13,6 @@ public final class WebWorkItem {
         this.description =builder.description;
         this.assignedUsername = builder.assignedUserName;
         this.issueDescription = builder.issue;
-        System.out.println(builder.status);
         this.status =builder.status;
     }
 
@@ -70,7 +69,6 @@ public final class WebWorkItem {
         private final String description;
 
         private String assignedUserName = "No assigned user";
-//        private String assignedUserName = null;
         private String issue = "No issue";
         private String status = null;
 
