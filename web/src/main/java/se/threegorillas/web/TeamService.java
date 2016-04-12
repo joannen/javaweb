@@ -3,8 +3,10 @@ package se.threegorillas.web;
 import se.threegorillas.exception.TeamNotFoundException;
 import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
+import se.threegorillas.model.WorkItem;
 import se.threegorillas.provider.WebTeam;
 import se.threegorillas.provider.WebUser;
+import se.threegorillas.provider.WebWorkItem;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -140,4 +142,22 @@ public final class TeamService extends AbstractService {
         return webUsers;
     }
 
+
+    @GET
+    @Path("{id}/workitem")
+    public Collection<WebWorkItem> getAllWorkItemsForTeam(@PathParam("id") Long id){
+        Collection<WebWorkItem> webWorkItems = new ArrayList<>();
+        Collection<User> users = service.findUsersByTeamId(id);
+            for(User u:users){
+            Collection<WorkItem> workItems =u.getWorkItems();
+            workItems.forEach(workItem -> webWorkItems.add(toWebWorkItem(workItem)));
+        }
+
+//        users.forEach(u -> u.getWorkItems().forEach(w -> webWorkItems.add(toWebWorkItem(w))));
+        return webWorkItems;
+    }
 }
+
+
+
+

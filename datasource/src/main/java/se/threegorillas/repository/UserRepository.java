@@ -29,5 +29,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Collection<User> findByUserNameOrLastNameOrFirstNameLike(String search);
 
     Collection<User> findByFirstNameLike(String firstname);
-    Collection<User> findByTeam(Team t);
+
+    @Query("select u from User u left join fetch u.workItems join fetch u.team t where t.id = ?1")
+    Collection<User> findByTeamId(Long id);
 }

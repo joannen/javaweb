@@ -19,4 +19,5 @@ public interface WorkItemRepository extends JpaRepository<WorkItem, Long> {
 
     @Query("select w from WorkItem w where w.description like ?1")
     Collection<WorkItem> searchByDescription(String description);
+
 }
