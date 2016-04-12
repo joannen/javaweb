@@ -90,6 +90,12 @@ public class DataBaseService {
         workItemRepository.delete(id);
     }
 
+    public Collection<WorkItem> searchForWorkItemByDescription(String description){
+
+        String newDescription = "%" + description + "%";
+        return workItemRepository.searchByDescription(newDescription);
+    }
+
     //Team
     public Team saveTeam(Team team){ return teamRepository.save(team);}
 
