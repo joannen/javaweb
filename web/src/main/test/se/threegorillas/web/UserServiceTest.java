@@ -8,29 +8,26 @@ import se.threegorillas.provider.webparser.ArrayListUserProvider;
 import se.threegorillas.provider.webparser.UserProvider;
 import se.threegorillas.provider.webparser.WorkItemProvider;
 
-import javax.ws.rs.client.*;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class UserServiceTest {
 
     private final String userUrl = "http://localhost:8080/web/user";
-    private final String teamUrl = "http://localhost:8080/web/team";
     private Client client;
     private WebTarget sampleUser;
     private WebTarget postUser;
     private WebTarget userWithId;
-    private WebTarget getAllUsers;
     private WebTarget searchForUsers;
-    private WebTarget searchForUsersByTeam;
-
+    private WebTarget searchForWorkItemByUser;
 
     @Before
     public void setup() {
@@ -38,11 +35,9 @@ public class UserServiceTest {
         sampleUser = client.target(userUrl).path("sample");
         postUser = client.target(userUrl);
         userWithId = client.target(userUrl).path("{id}");
-        getAllUsers =client.target(userUrl);
         searchForUsers= client.target(userUrl).path("search");
-        searchForUsersByTeam = client.target(teamUrl).path("{id}/user");
+        searchForWorkItemByUser = client.target(userUrl).path("{usernumber}/workitem");
     }
-
 
     @Test
     public void nullIsNotNull() {
@@ -83,7 +78,6 @@ public class UserServiceTest {
         assertTrue(updateStatus == 204);
 
         retrievedUser = userWithId.resolveTemplate("id", updatedUser.getUserNumber()).request().get(WebUser.class);
-        System.out.println(retrievedUser);
 
         assertEquals(retrievedUser, updatedUser);
     }
@@ -91,7 +85,6 @@ public class UserServiceTest {
     @Test
     public void shouldThrowExceptionWhenUserIsNotFound(){
         int status =userWithId.resolveTemplate("id", 10).request().get().getStatus();
-        System.out.println(userWithId.resolveTemplate("id", 10).request().get().readEntity(String.class));
         assertEquals(status, 404);
     }
 
@@ -99,7 +92,6 @@ public class UserServiceTest {
     public void shouldBeAbleToSearchForUsers(){
         WebTarget search = searchForUsers.queryParam("query","cde");
         Collection<WebUser> webUsers = search.request().get(ArrayList.class);
-        System.out.println(webUsers);
         assertTrue(webUsers.size() >0);
     }
 
@@ -107,11 +99,17 @@ public class UserServiceTest {
     public void addWorkItemToUser(){
         WebWorkItem webWorkItem = new WebWorkItem.Builder(1L, "fghjk").build();
         WebUser userToSave = new WebUser(1L, "abc", "abc", "abc", "abc", "102200010004020009980", "0");
-        URI location = postUser.request().post(Entity.entity(userToSave, MediaType.APPLICATION_JSON_TYPE)).getLocation();
-        WebTarget getUserWithId = client.target(location);
 
-        WebTarget userWorkItem= client.target(location).path("workitem");
-        URI itemlocation = userWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getLocation();
+        URI location = postUser.request().post(Entity.entity(userToSave, MediaType.APPLICATION_JSON_TYPE)).getLocation();
+        WebTarget getUser = client.target(location);
+        WebUser retrievedUser = getUser.request().get(WebUser.class);
+        WebTarget getWorkItemForUser = searchForWorkItemByUser.resolveTemplate("usernumber", retrievedUser.getUserNumber());
+
+        int addedWorkItemStatus = getWorkItemForUser.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getStatus();
+        assertEquals(addedWorkItemStatus, 201);
+
+        Collection<WebWorkItem> webWorkItems = getWorkItemForUser.request().get(ArrayList.class);
+        assertTrue(webWorkItems.size() > 0);
     }
 
 }

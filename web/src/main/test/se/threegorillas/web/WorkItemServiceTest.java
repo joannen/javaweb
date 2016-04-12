@@ -20,10 +20,6 @@ import java.util.Collection;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by joanne on 08/04/16.
- */
-
 public class WorkItemServiceTest {
 
     private final String url = "http://localhost:8080/web/workitem";
@@ -41,9 +37,7 @@ public class WorkItemServiceTest {
     @Test
     public void shouldBeAbleToAddWorkItem(){
         WebWorkItem webWorkItem = new WebWorkItem.Builder(1L, "klean kitchen").build();
-
         URI location = postWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getLocation();
-
         WebTarget getWorkItem = client.target(location);
         WebWorkItem item = getWorkItem.request().get(WebWorkItem.class);
 
@@ -91,6 +85,17 @@ public class WorkItemServiceTest {
 
         Issue issue = new Issue("Joanne har ingen hund");
         String updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issue.getIssueDescription(), MediaType.APPLICATION_JSON_TYPE)).readEntity(String.class);
+
+//        WebTarget addIssueToWorkItem = client.target(url).path("{id}/issue");
+//        Issue issue = new Issue("Joanne har ingen hund");
+//        WebWorkItem webWorkItem = new WebWorkItem.Builder(2L, "Mata hunden").build();
+//        URI location = postWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getLocation();
+//
+//        WebTarget getWorkItem = client.target(location);
+//        WebWorkItem retrievedWorkItem = getWorkItem.request().get(WebWorkItem.class);
+//        WebTarget getIssueForWorkItem = addIssueToWorkItem.resolveTemplate("id", retrievedWorkItem.getId());
+//
+//        String updatedWorkItem = getIssueForWorkItem.request().post(Entity.entity(issue.getIssueDescription(), MediaType.APPLICATION_JSON_TYPE)).readEntity(String.class);
     }
 
     @Test

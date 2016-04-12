@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import se.threegorillas.model.WebTeam;
 import se.threegorillas.model.WebUser;
-import se.threegorillas.model.WebWorkItem;
 import se.threegorillas.provider.webparser.*;
 
 import javax.ws.rs.client.Client;
@@ -16,7 +15,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by joanne on 07/04/16.
@@ -84,7 +84,6 @@ public class TeamServiceTest {
 
         int addedUserStatus = getUsersForTeam.request().post(Entity.entity(webUser, MediaType.APPLICATION_JSON_TYPE)).getStatus();
         assertEquals(addedUserStatus, 201);
-
 
         Collection<WebUser> usersForTeam = getUsersForTeam.request().get(ArrayList.class);
         assertTrue(usersForTeam.size()>0);
