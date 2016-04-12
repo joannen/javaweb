@@ -1,10 +1,9 @@
 package se.threegorillas.web;
 
-import com.sun.deploy.util.SessionState;
 import org.junit.Before;
 import org.junit.Test;
-import se.threegorillas.provider.WebTeam;
-import se.threegorillas.provider.WebUser;
+import se.threegorillas.model.WebTeam;
+import se.threegorillas.model.WebUser;
 import se.threegorillas.provider.webparser.ArrayListTeamProvider;
 import se.threegorillas.provider.webparser.TeamProvider;
 import se.threegorillas.provider.webparser.UserProvider;
@@ -80,7 +79,7 @@ public class TeamServiceTest {
     @Test
     public void addUserToTeamAndGetAllUsersForTeam(){
         WebTarget addUserToTeam = client.target(teamUrl).path("{id}/user");
-        WebUser webUser = new WebUser(1l, "fghj", "fghjk", "fghjm", "ghjm", "ghjkl");
+        WebUser webUser = new WebUser(1l, "fghj", "fghjk", "fghjm", "ghjm", "ghjkl", "0");
         WebTeam webTeam = new WebTeam(1L, "A-TEAM");
 
         WebTarget savedTeam = client.target(teamUrl);

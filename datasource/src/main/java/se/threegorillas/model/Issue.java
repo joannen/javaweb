@@ -1,8 +1,6 @@
 package se.threegorillas.model;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
 
 @Embeddable
 public class Issue{
@@ -27,7 +25,6 @@ public class Issue{
         Issue issue = (Issue) o;
 
         return !(issueDescription != null ? !issueDescription.equals(issue.issueDescription) : issue.issueDescription != null);
-
     }
 
     @Override

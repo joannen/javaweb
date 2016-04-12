@@ -3,7 +3,7 @@ package se.threegorillas.web;
 import se.threegorillas.exception.InvalidIssueException;
 import se.threegorillas.model.Issue;
 import se.threegorillas.model.WorkItem;
-import se.threegorillas.provider.WebWorkItem;
+import se.threegorillas.model.WebWorkItem;
 import se.threegorillas.status.Status;
 
 import javax.ws.rs.*;
@@ -104,16 +104,14 @@ public final class WorkItemService extends AbstractService {
     public Response deleteWorkItem(@PathParam("id") Long id) {
 
         WorkItem workItem = service.findWorkItemById(id);
-
-        if (workItem == null) {
-            throw new WebApplicationException("WorkItem not found", 404);
-        }
-
+        service.deleteWorkItem(id);
         return Response.noContent().build();
+
     }
 
     @OPTIONS
     public Response allowedMethods() {
+
         return Response.noContent()
                 .allow("GET", "POST", "PUT", "DELETE")
                 .header("Content-Length", 0)

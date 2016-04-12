@@ -2,7 +2,7 @@ package se.threegorillas.provider.webparser;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
-import se.threegorillas.provider.WebWorkItem;
+import se.threegorillas.model.WebWorkItem;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -59,8 +59,6 @@ public final class WorkItemProvider implements MessageBodyReader<WebWorkItem>, M
 
             Long id = workItemJson.get("id").getAsLong();
             String description = workItemJson.get("description").getAsString();
-//            String assignedUsername =workItemJson.get("assignedUsername").getAsString();
-//            String issue = workItemJson.get("issueDescription").getAsString();
             String status = null;
             if (workItemJson.has("status")){
                 status = workItemJson.get("status").getAsString();
@@ -71,12 +69,9 @@ public final class WorkItemProvider implements MessageBodyReader<WebWorkItem>, M
 
 
         public JsonElement serialize(WebWorkItem webWorkItem, Type type, JsonSerializationContext jsonSerializationContext) {
+
             String issue = webWorkItem.getIssueDescription();
             JsonObject json = new JsonObject();
-//            JsonObject issueJson = new JsonObject();
-
-//            issueJson.addProperty("description", issue);
-
             json.addProperty("id", webWorkItem.getId());
             json.addProperty("description", webWorkItem.getDescription());
             json.addProperty("assignedUsername", webWorkItem.getAssignedUsername());
@@ -86,4 +81,5 @@ public final class WorkItemProvider implements MessageBodyReader<WebWorkItem>, M
             return json;
         }
     }
+
 }

@@ -2,7 +2,7 @@ package se.threegorillas.provider.webparser;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
-import se.threegorillas.provider.WebUser;
+import se.threegorillas.model.WebUser;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -62,8 +62,9 @@ public final class UserProvider implements MessageBodyReader<WebUser>, MessageBo
             String username = userJson.get("username").getAsString();
             String password = userJson.get("password").getAsString();
             String userNumber = userJson.get("userNumber").getAsString();
+            String status = userJson.get("status").getAsString();
 
-            return new WebUser(id, firstName,lastName,username, password, userNumber);
+            return new WebUser(id, firstName,lastName,username, password, userNumber, status);
         }
 
         @Override
@@ -76,8 +77,10 @@ public final class UserProvider implements MessageBodyReader<WebUser>, MessageBo
             json.addProperty("username", webUser.getUsername());
             json.addProperty("password", webUser.getPassword());
             json.addProperty("userNumber", webUser.getUserNumber());
+            json.addProperty("status", webUser.getStatus());
 
             return json;
         }
     }
+
 }

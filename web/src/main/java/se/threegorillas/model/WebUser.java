@@ -1,4 +1,4 @@
-package se.threegorillas.provider;
+package se.threegorillas.model;
 
 public final class WebUser {
 
@@ -8,15 +8,19 @@ public final class WebUser {
     private final String username;
     private final String password;
     private final String userNumber;
+    private final String status;
 
 
-    public WebUser(Long id, String firstName, String lastName, String username, String password, String userNumber) {
+    public WebUser(Long id, String firstName, String lastName, String username, String password, String userNumber, String status) {
+
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.userNumber = userNumber;
+        this.status = status;
+
     }
 
     public String getUsername() {
@@ -43,8 +47,13 @@ public final class WebUser {
         return userNumber;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -62,15 +71,17 @@ public final class WebUser {
         return result;
     }
 
-//    @Override
-//    public String toString() {
-//        return "WebUser{" +
-//                "id=" + id +
-//                ", firstName='" + firstName + '\'' +
-//                ", lastName='" + lastName + '\'' +
-//                ", username='" + username + '\'' +
-//                ", password='" + password + '\'' +
-//                ", userNumber='" + userNumber + '\'' +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+
+        return "WebUser{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", userNumber='" + userNumber + '\'' +
+                '}';
+    }
+
 }

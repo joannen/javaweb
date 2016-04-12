@@ -25,19 +25,18 @@ public class WorkItem extends AbstractEntity {
         this.description = description;
         this.status = Status.UNSTARTED;
     }
-   public WorkItem(Long id, String description){
-       this.id = id;
-       this.description = description;
-       this.status = Status.UNSTARTED;
-    }
 
-    public WorkItem(Long id, String description, String status){
-        this.id =id;
-        this.description = description;
-        this.status = status;
-    }
-
-
+//   public WorkItem(Long id, String description){
+//       this.id = id;
+//       this.description = description;
+//       this.status = Status.UNSTARTED;
+//    }
+//
+//    public WorkItem(Long id, String description, String status){
+//        this.id =id;
+//        this.description = description;
+//        this.status = status;
+//    }
 
     public String getAssignedUsername() {
         return assignedUsername;
@@ -55,9 +54,9 @@ public class WorkItem extends AbstractEntity {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
 
     public String getStatus(){ return status;}
 
@@ -81,7 +80,6 @@ public class WorkItem extends AbstractEntity {
         this.issue = issue;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,7 +88,6 @@ public class WorkItem extends AbstractEntity {
         WorkItem workItem = (WorkItem) o;
 
         return !(description != null ? !description.equals(workItem.description) : workItem.description != null);
-
     }
 
     @Override
@@ -105,4 +102,5 @@ public class WorkItem extends AbstractEntity {
                 ", status='" + status + '\'' +
                 '}';
     }
+
 }

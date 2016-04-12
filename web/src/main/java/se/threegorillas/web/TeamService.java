@@ -2,10 +2,9 @@ package se.threegorillas.web;
 
 import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
-import se.threegorillas.model.WorkItem;
-import se.threegorillas.provider.WebTeam;
-import se.threegorillas.provider.WebUser;
-import se.threegorillas.provider.WebWorkItem;
+import se.threegorillas.model.WebTeam;
+import se.threegorillas.model.WebUser;
+import se.threegorillas.model.WebWorkItem;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -58,6 +57,7 @@ public final class TeamService extends AbstractService {
 
     @GET
     public Collection<WebTeam> getAllTeams(){
+
         List<Team> teams = (List<Team>) service.getAllTeams();
 
         List<WebTeam> webTeams = teams.stream().map(t -> toWebTeam(t)).collect(Collectors.toList());
@@ -75,15 +75,17 @@ public final class TeamService extends AbstractService {
         Team savedTeam = service.saveTeam(t);
 
         if(teamExist){
+
             return Response.noContent().build();
+
         } else {
+
             URI location = uriInfo.getAbsolutePathBuilder()
                     .path(TeamService.class, "getTeam")
                     .build(savedTeam.getId());
 
             return Response.created(location).build();
         }
-
     }
 
     @DELETE
@@ -127,7 +129,7 @@ public final class TeamService extends AbstractService {
         Collection<WebUser> webUsers= new ArrayList<>();
         Collection<User> users = service.findTeamById(id).getUsers();
 
-        users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(), u.getUserName(), u.getPassword(), u.getUserNumber())));
+        users.forEach(u -> webUsers.add(new WebUser(u.getId(), u.getFirstName(), u.getLastName(), u.getUserName(), u.getPassword(), u.getUserNumber(), u.getUserStatus())));
 
         return webUsers;
     }

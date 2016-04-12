@@ -20,6 +20,6 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     @Query("select t from Team t left join fetch t.users where t.teamName = ?1")
     Team findByTeamName(String teamName);
 
-    Collection<Team> findByTeamStatus(String teamStatus);
+//    Collection<Team> findByTeamStatus(String teamStatus);
 
 }

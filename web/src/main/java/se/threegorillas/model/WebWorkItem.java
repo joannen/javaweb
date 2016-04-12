@@ -1,4 +1,6 @@
-package se.threegorillas.provider;
+package se.threegorillas.model;
+
+import se.threegorillas.status.Status;
 
 public final class WebWorkItem {
 
@@ -9,6 +11,7 @@ public final class WebWorkItem {
     private final String status;
 
     public WebWorkItem(Builder builder){
+
         this.id = builder.id;
         this.description =builder.description;
         this.assignedUsername = builder.assignedUserName;
@@ -38,6 +41,7 @@ public final class WebWorkItem {
 
     @Override
     public String toString() {
+
         return "WebWorkItem{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
@@ -45,10 +49,12 @@ public final class WebWorkItem {
                 ", issueDescription='" + issueDescription + '\'' +
                 ", status='" + status + '\'' +
                 '}';
+
     }
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -63,8 +69,8 @@ public final class WebWorkItem {
         return description != null ? description.hashCode() : 0;
     }
 
-
     public static class Builder{
+
         private final Long id;
         private final String description;
 
@@ -94,9 +100,7 @@ public final class WebWorkItem {
         public WebWorkItem build(){
             return new WebWorkItem(this);
         }
+
     }
-
-
-
 
 }

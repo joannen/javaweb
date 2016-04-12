@@ -22,7 +22,7 @@ public class User extends AbstractEntity {
 	@Column(nullable = false)
 	private String password;
 
-	@Column
+	@Column(nullable = false)
 	private String userStatus;
 
 	@Column(nullable = false)
@@ -95,9 +95,12 @@ public class User extends AbstractEntity {
 		return new ArrayList<>(workItems);
 	}
 
+	public void setUserStatus(String status){
+		this.userStatus = status;
+	}
+
 	public void setStatusInactive() {
 		makeAllWorkItemsUnstarted();
-
 		this.userStatus = Status.INACTIVE;
 	}
 
@@ -107,6 +110,13 @@ public class User extends AbstractEntity {
 
 	public User deleteWorkItem(WorkItem workItem) {
 		this.workItems.remove(workItem);
+		return this;
+	}
+
+	public User addWorkItem(WorkItem workItem) {
+		workItem.setAssignedUsername(this.getUserName());
+		workItem.setStatusStarted();
+		this.workItems.add(workItem);
 		return this;
 	}
 
@@ -133,13 +143,6 @@ public class User extends AbstractEntity {
 		} else if (!userName.equals(other.userName))
 			return false;
 		return true;
-	}
-
-	public User addWorkItem(WorkItem workItem) {
-		workItem.setAssignedUsername(this.getUserName());
-		workItem.setStatusStarted();
-		this.workItems.add(workItem);
-		return this;
 	}
 
 	@Override

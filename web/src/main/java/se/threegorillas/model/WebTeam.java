@@ -1,10 +1,6 @@
-package se.threegorillas.provider;
+package se.threegorillas.model;
 
 import se.threegorillas.status.Status;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
 
 public final class WebTeam {
 
@@ -18,6 +14,26 @@ public final class WebTeam {
         this.teamName = teamName;
         this.teamStatus = teamStatus;
 
+    }
+
+    public WebTeam(Long id, String teamName) {
+
+        this.id = id;
+        this.teamName = teamName;
+        this.teamStatus = Status.ACTIVE;
+
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public String getTeamStatus() {
+        return teamStatus;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override
@@ -34,36 +50,22 @@ public final class WebTeam {
 
     @Override
     public int hashCode() {
+
         int result = teamName != null ? teamName.hashCode() : 0;
         result = 31 * result + (teamStatus != null ? teamStatus.hashCode() : 0);
         return result;
-    }
 
-    public WebTeam(Long id, String teamName) {
-        this.id = id;
-        this.teamName = teamName;
-        this.teamStatus = Status.ACTIVE;
-    }
-
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public String getTeamStatus() {
-        return teamStatus;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     @Override
     public String toString() {
+
         return "WebTeam{" +
                 "id=" + id +
                 ", teamName='" + teamName + '\'' +
                 ", teamStatus='" + teamStatus + '\'' +
                 '}';
+
     }
+
 }

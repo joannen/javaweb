@@ -2,7 +2,7 @@ package se.threegorillas.provider.webparser;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
-import se.threegorillas.provider.WebTeam;
+import se.threegorillas.model.WebTeam;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -79,4 +79,5 @@ public class TeamProvider implements MessageBodyReader<WebTeam>, MessageBodyWrit
             return json;
         }
     }
+
 }

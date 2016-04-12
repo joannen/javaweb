@@ -3,7 +3,7 @@ package se.threegorillas.web;
 import org.junit.Before;
 import org.junit.Test;
 import se.threegorillas.model.Issue;
-import se.threegorillas.provider.WebWorkItem;
+import se.threegorillas.model.WebWorkItem;
 import se.threegorillas.provider.webparser.ArrayListWorkItemProvider;
 import se.threegorillas.provider.webparser.WorkItemProvider;
 import se.threegorillas.status.Status;
@@ -79,7 +79,7 @@ public class WorkItemServiceTest {
         WebWorkItem retrieved = getWorkitem.request().get(WebWorkItem.class);
         assertTrue(retrieved.getStatus().equals(Status.UNSTARTED));
 
-        WebTarget getByStatus = client.target(url).path("status").queryParam("status");
+        WebTarget getByStatus = client.target(url).queryParam("status");
         Collection<WebWorkItem> itemsByStatus = getByStatus.queryParam("status", Status.UNSTARTED).request().get(ArrayList.class);
         assertTrue(itemsByStatus.size() > 0);
     }
@@ -95,12 +95,8 @@ public class WorkItemServiceTest {
 
         Issue issue = new Issue("Joanne har ingen hund");
 
-        System.out.println(postIssueToWorkItem.getUri());
-
 //        URI updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issue.getIssueDescription(), MediaType.APPLICATION_JSON_TYPE)).getLocation();
         String updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issue.getIssueDescription(), MediaType.APPLICATION_JSON_TYPE)).readEntity(String.class);
-
-        System.out.println(updatedWorkItem);
 
     }
 

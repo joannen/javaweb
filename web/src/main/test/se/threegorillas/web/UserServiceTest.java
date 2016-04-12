@@ -2,8 +2,8 @@ package se.threegorillas.web;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.threegorillas.provider.WebUser;
-import se.threegorillas.provider.WebWorkItem;
+import se.threegorillas.model.WebUser;
+import se.threegorillas.model.WebWorkItem;
 import se.threegorillas.provider.webparser.ArrayListUserProvider;
 import se.threegorillas.provider.webparser.UserProvider;
 import se.threegorillas.provider.webparser.WorkItemProvider;
@@ -64,7 +64,7 @@ public class UserServiceTest {
 
     @Test
     public void shouldBeAbleToCreateUser(){
-        WebUser userToSave = new WebUser(1L, "abc",  "joanne", "noriiiiiiiiiiiii", "123", "100000000000001");
+        WebUser userToSave = new WebUser(1L, "abc",  "joanne", "noriiiiiiiiiiiii", "123", "100000000000001", "0");
 
         String location = postUser.request().post(Entity.entity(userToSave, MediaType.APPLICATION_JSON_TYPE)).getHeaderString("location");
         WebTarget getUserWithId = client.target(location);
@@ -75,13 +75,13 @@ public class UserServiceTest {
 
     @Test
     public void updatedUserShouldBeUpdated() {
-        WebUser userToSave = new WebUser(1L, "abc", "abc", "abc", "abc", "abc");
+        WebUser userToSave = new WebUser(1L, "abc", "abc", "abc", "abc", "abc", "0");
         URI location = postUser.request().post(Entity.entity(userToSave, MediaType.APPLICATION_JSON_TYPE)).getLocation();
         WebTarget getUserWithId = client.target(location);
         WebUser retrievedUser = getUserWithId.request().get(WebUser.class);
         assertEquals(userToSave, retrievedUser);
 
-        WebUser updatedUser = new WebUser(retrievedUser.getId(), "cde", "cde", "cde", "cde", "cde");
+        WebUser updatedUser = new WebUser(retrievedUser.getId(), "cde", "cde", "cde", "cde", "cde", "0");
 
         int updateStatus = getUserWithId.request().put(Entity.entity(updatedUser, MediaType.APPLICATION_JSON_TYPE)).getStatus();
         assertTrue(updateStatus == 204);
@@ -111,7 +111,7 @@ public class UserServiceTest {
     @Test
     public void addWorkItemToUser(){
         WebWorkItem webWorkItem = new WebWorkItem.Builder(1L, "fghjk").build();
-        WebUser userToSave = new WebUser(1L, "abc", "abc", "abc", "abc", "102200010004020009980");
+        WebUser userToSave = new WebUser(1L, "abc", "abc", "abc", "abc", "102200010004020009980", "0");
         URI location = postUser.request().post(Entity.entity(userToSave, MediaType.APPLICATION_JSON_TYPE)).getLocation();
         WebTarget getUserWithId = client.target(location);
         System.out.println(location);

@@ -2,6 +2,7 @@ package se.threegorillas.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.threegorillas.exception.DeleteException;
 import se.threegorillas.exception.EntityNotFoundException;
 import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
@@ -65,7 +66,6 @@ public class DataBaseService {
         return userRepository.findByTeamId(id);
     }
 
-
     //WorkItem
     public WorkItem saveWorkItem(WorkItem workItem) {
         return workItemRepository.save(workItem);
@@ -80,9 +80,9 @@ public class DataBaseService {
         return workItem;
     }
 
-    public boolean workItemExists(WorkItem workItem) {
-        return workItemRepository.findOne(workItem.getId()) != null;
-    }
+//    public boolean workItemExists(WorkItem workItem) {
+//        return workItemRepository.findOne(workItem.getId()) != null;
+//    }
 
     public Collection<WorkItem> getAllWorkItems() {
         return workItemRepository.findAll();
@@ -95,7 +95,6 @@ public class DataBaseService {
     }
 
     public Collection<WorkItem> searchForWorkItemByDescription(String description){
-
         String newDescription = "%" + description + "%";
         return workItemRepository.searchByDescription(newDescription);
     }
@@ -115,6 +114,13 @@ public class DataBaseService {
     public Collection<Team> getAllTeams(){return teamRepository.findAll();}
 
     public void removeTeam(Long id){
+
+        Team team = teamRepository.findOne(id);
+
+        if (team.getUsers().size() > 0){
+            throw new DeleteException("Can not delete Team with id: " + id );
+        }
+
         teamRepository.delete(id);
     }
 
@@ -126,7 +132,6 @@ public class DataBaseService {
             throw new EntityNotFoundException("team with name: " + teamName + " not found");
         }
         return team;
-
     }
 
 }
