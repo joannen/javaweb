@@ -82,11 +82,17 @@ public final class UserService extends AbstractService{
     public Collection<WebWorkItem> getAllWorkItemsForOneUser(@PathParam("usernumber") String usernumber) {
         User u = service.findUserByUserNumber(usernumber);
 
-        Collection<WebWorkItem> webWorkItems = u.getWorkItems().stream()
-                .map(w -> new WebWorkItem.Builder(w.getId(), w.getDescription()).withAssignedUserName(w.getAssignedUsername()).build())
-                .collect(Collectors.toList());
+        Collection<WebWorkItem> webWorkItems1 = new ArrayList<>();
+        
+        for (WorkItem workItem : u.getWorkItems()) {
+            boolean hasIssue = workItem.getIssue() != null;
+            webWorkItems1.add(new WebWorkItem.Builder(workItem.getId(), workItem.getDescription())
+                                    .withAssignedUserName(workItem.getAssignedUsername())
+                                    .withIssue((hasIssue) ? workItem.getIssue().getIssueDescription() : null)
+                                    .build());
+        }
 
-        return webWorkItems;
+        return webWorkItems1;
     }
 
     @POST
@@ -94,12 +100,6 @@ public final class UserService extends AbstractService{
     public Response addWorkItemToUser(@PathParam("id") String userNumber, WebWorkItem webWorkItem) throws URISyntaxException {
         User u = service.findUserByUserNumber(userNumber);
         WorkItem w;
-//        if (service.findWorkItemById(webWorkItem.getId()) != null) {
-//            w = service.findWorkItemById(webWorkItem.getId());
-//
-//        } else {
-//            w = new WorkItem(webWorkItem.getDescription());
-//        }
 
         try{
             w = service.findWorkItemById(webWorkItem.getId());

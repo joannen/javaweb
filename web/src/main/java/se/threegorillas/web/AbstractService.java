@@ -38,22 +38,11 @@ public abstract class AbstractService {
     }
 
     protected WebWorkItem toWebWorkItem(WorkItem workItem){
-        WebWorkItem webWorkItem;
-//        if (null == workItem.getAssignedUsername()) {
-//            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
-//                    withStatus(workItem.getStatus()).build();
-//        } else if (null == workItem.getIssue()) {
-//            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
-//                    withAssignedUserName(workItem.getAssignedUsername()).withStatus(workItem.getStatus()).build();
-//        } else {
-//            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
-//                    withAssignedUserName(workItem.getAssignedUsername()).withStatus(workItem.getStatus())
-//                    .withIssue(workItem.getIssue().getIssueDescription()).build();
-//        }
-
-        webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription())
+        boolean hasIssue = workItem.getIssue() != null;
+        WebWorkItem webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription())
                                     .withAssignedUserName(workItem.getAssignedUsername())
                                     .withStatus(workItem.getStatus())
+                                    .withIssue((hasIssue) ? workItem.getIssue().getIssueDescription() : null)
                                     .build();
         return webWorkItem;
     }

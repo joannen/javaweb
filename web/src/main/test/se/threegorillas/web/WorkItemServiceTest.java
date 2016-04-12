@@ -92,14 +92,13 @@ public class WorkItemServiceTest {
         WebTarget postIssueToWorkItem = client.target(location).path("issue");
 
         Issue issue = new Issue("Joanne har ingen hund");
-        String issuedesc = "Joanne har ingen hund";
 
         System.out.println(postIssueToWorkItem.getUri());
 
-//        URI updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issuedesc, MediaType.APPLICATION_JSON_TYPE)).getLocation();
-//        String updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issuedesc, MediaType.APPLICATION_JSON_TYPE)).readEntity(String.class);
+//        URI updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issue.getIssueDescription(), MediaType.APPLICATION_JSON_TYPE)).getLocation();
+        String updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issue.getIssueDescription(), MediaType.APPLICATION_JSON_TYPE)).readEntity(String.class);
 
-//        System.out.println(updatedWorkItem);
+        System.out.println(updatedWorkItem);
 
     }
 
