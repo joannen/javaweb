@@ -138,12 +138,8 @@ public final class TeamService extends AbstractService {
     public Collection<WebWorkItem> getAllWorkItemsForTeam(@PathParam("id") Long id){
         Collection<WebWorkItem> webWorkItems = new ArrayList<>();
         Collection<User> users = service.findUsersByTeamId(id);
-            for(User u:users){
-            Collection<WorkItem> workItems =u.getWorkItems();
-            workItems.forEach(workItem -> webWorkItems.add(toWebWorkItem(workItem)));
-        }
 
-//        users.forEach(u -> u.getWorkItems().forEach(w -> webWorkItems.add(toWebWorkItem(w))));
+        users.forEach(u -> u.getWorkItems().forEach(w -> webWorkItems.add(toWebWorkItem(w))));
         return webWorkItems;
     }
 }

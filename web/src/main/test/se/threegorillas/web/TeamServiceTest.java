@@ -95,5 +95,11 @@ public class TeamServiceTest {
         assertTrue(usersForTeam.size()>0);
     }
 
+    @Test
+    public void getWorkItemsForTeam(){
+
+
+    }
+
    
 }
