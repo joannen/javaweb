@@ -12,7 +12,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/workitem")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -52,7 +51,7 @@ public final class WorkItemService extends AbstractService {
         WorkItem retrieved = service.findWorkItemById(id);
         WebWorkItem webWorkItem;
 
-        return workItemToWebWorkItem(retrieved);
+        return toWebWorkItem(retrieved);
 
     }
 
@@ -105,7 +104,7 @@ public final class WorkItemService extends AbstractService {
     public Collection<WebWorkItem> getWorkItemsByStatus(@QueryParam("status")String status){
         Collection<WorkItem> workItems= service.getWorkItemsByStatus(status);
         Collection<WebWorkItem> webWorkItems = new ArrayList<>();
-        workItems.forEach(w -> webWorkItems.add(workItemToWebWorkItem(w)));
+        workItems.forEach(w -> webWorkItems.add(toWebWorkItem(w)));
 
         return webWorkItems;
     }
@@ -152,10 +151,6 @@ public final class WorkItemService extends AbstractService {
     public Response addIssueToWorkItem(@PathParam("id") Long id, String body) {
         WorkItem workItem = service.findWorkItemById(id);
 
-        if (workItem == null) {
-            throw new WebApplicationException(404);
-        }
-
         Issue issue = new Issue(body);
 
         workItem.setIssue(issue);
@@ -165,28 +160,10 @@ public final class WorkItemService extends AbstractService {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        URI location = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "getOneWorkItem").build();
+        URI location = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "getOneWorkItem").build(workItem1.getId());
 
         return Response.created(location).build();
 
     }
 
-    private WebWorkItem workItemToWebWorkItem(WorkItem workItem){
-        WebWorkItem webWorkItem;
-        System.out.println("username: " + workItem.getAssignedUsername());
-        if (null == workItem.getAssignedUsername()) {
-            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
-                    withStatus(workItem.getStatus()).build();
-        } else if (null == workItem.getIssue()) {
-            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
-                    withAssignedUserName(workItem.getAssignedUsername()).withStatus(workItem.getStatus()).build();
-        } else {
-            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
-                    withAssignedUserName(workItem.getAssignedUsername()).withStatus(workItem.getStatus())
-                    .withIssue(workItem.getIssue().getIssueDescription()).build();
-        }
-
-        return webWorkItem;
-
-    }
 }

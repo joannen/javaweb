@@ -1,7 +1,11 @@
 package se.threegorillas.web;
 
+import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
+import se.threegorillas.model.WorkItem;
+import se.threegorillas.provider.WebTeam;
 import se.threegorillas.provider.WebUser;
+import se.threegorillas.provider.WebWorkItem;
 import se.threegorillas.service.DataBaseService;
 
 import javax.annotation.PostConstruct;
@@ -31,5 +35,30 @@ public abstract class AbstractService {
         WebUser webUser = new WebUser(user.getId(), user.getFirstName(), user.getLastName(),
                 user.getUserName(), user.getPassword(), user.getUserNumber());
         return webUser;
+    }
+
+    protected WebWorkItem toWebWorkItem(WorkItem workItem){
+        WebWorkItem webWorkItem;
+//        if (null == workItem.getAssignedUsername()) {
+//            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
+//                    withStatus(workItem.getStatus()).build();
+//        } else if (null == workItem.getIssue()) {
+//            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
+//                    withAssignedUserName(workItem.getAssignedUsername()).withStatus(workItem.getStatus()).build();
+//        } else {
+//            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
+//                    withAssignedUserName(workItem.getAssignedUsername()).withStatus(workItem.getStatus())
+//                    .withIssue(workItem.getIssue().getIssueDescription()).build();
+//        }
+
+        webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription())
+                                    .withAssignedUserName(workItem.getAssignedUsername())
+                                    .withStatus(workItem.getStatus())
+                                    .build();
+        return webWorkItem;
+    }
+
+    protected WebTeam toWebTeam(Team t) {
+        return new WebTeam(t.getId(), t.getTeamName(), t.getTeamStatus());
     }
 }

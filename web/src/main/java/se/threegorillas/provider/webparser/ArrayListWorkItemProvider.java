@@ -98,6 +98,7 @@ public final class ArrayListWorkItemProvider implements MessageBodyWriter<ArrayL
             json.addProperty("id", webWorkItem.getId());
             json.addProperty("description", webWorkItem.getDescription());
             json.addProperty("assignedUser", webWorkItem.getAssignedUsername());
+            json.addProperty("status", webWorkItem.getStatus());
 
             return json;
         }

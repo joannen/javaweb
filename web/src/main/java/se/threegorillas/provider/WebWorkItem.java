@@ -72,7 +72,7 @@ public final class WebWorkItem {
 
         private String assignedUserName = "No assigned user";
         private String issue = "No issue";
-        private String status = "";
+        private String status = null;
 
         public Builder(Long id, String description){
             this.id=id;
@@ -88,7 +88,7 @@ public final class WebWorkItem {
             this.issue=issue;
             return this;
         }
-        public Builder withStatus(String status){
+        public Builder withStatus(String status) {
             this.status = status;
             return this;
         }

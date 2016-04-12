@@ -66,7 +66,6 @@ public final class WorkItemProvider implements MessageBodyReader<WebWorkItem>, M
                 status = workItemJson.get("status").getAsString();
             }
 
-
             return new WebWorkItem.Builder(id, description).withStatus(status).build();
         }
 

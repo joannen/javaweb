@@ -2,6 +2,7 @@ package se.threegorillas.web;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.threegorillas.model.Issue;
 import se.threegorillas.provider.WebWorkItem;
 import se.threegorillas.provider.webparser.ArrayListWorkItemProvider;
 import se.threegorillas.provider.webparser.WorkItemProvider;
@@ -78,10 +79,29 @@ public class WorkItemServiceTest {
 
         WebTarget getByStatus = client.target(url).path("status").queryParam("status");
         Collection<WebWorkItem> itemsByStatus = getByStatus.queryParam("status", Status.UNSTARTED).request().get(ArrayList.class);
-//        for (WebWorkItem w:itemsByStatus){
-//            System.out.println(w);
-//        }
-//        assertTrue(itemsByStatus.contains(retrieved));
+        assertTrue(itemsByStatus.size() > 0);
     }
+
+    @Test
+    public void shouldBeAbleToAddIssueToWorkItem() {
+        WebWorkItem webWorkItem = new WebWorkItem.Builder(2L, "Mata hunden").build();
+
+        URI location = postWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getLocation();
+
+        WebTarget getWorkItem = client.target(location);
+        WebTarget postIssueToWorkItem = client.target(location).path("issue");
+
+        Issue issue = new Issue("Joanne har ingen hund");
+        String issuedesc = "Joanne har ingen hund";
+
+        System.out.println(postIssueToWorkItem.getUri());
+
+//        URI updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issuedesc, MediaType.APPLICATION_JSON_TYPE)).getLocation();
+//        String updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issuedesc, MediaType.APPLICATION_JSON_TYPE)).readEntity(String.class);
+
+//        System.out.println(updatedWorkItem);
+
+    }
+
 
 }
