@@ -82,17 +82,11 @@ public final class UserService extends AbstractService{
     public Collection<WebWorkItem> getAllWorkItemsForOneUser(@PathParam("usernumber") String usernumber) {
         User u = service.findUserByUserNumber(usernumber);
 
-        Collection<WebWorkItem> webWorkItems1 = new ArrayList<>();
+        Collection<WebWorkItem> webWorkItems = u.getWorkItems().stream()
+                .map(w -> toWebWorkItem(w))
+                .collect(Collectors.toList());
         
-        for (WorkItem workItem : u.getWorkItems()) {
-            boolean hasIssue = workItem.getIssue() != null;
-            webWorkItems1.add(new WebWorkItem.Builder(workItem.getId(), workItem.getDescription())
-                                    .withAssignedUserName(workItem.getAssignedUsername())
-                                    .withIssue((hasIssue) ? workItem.getIssue().getIssueDescription() : null)
-                                    .build());
-        }
-
-        return webWorkItems1;
+        return webWorkItems;
     }
 
     @POST

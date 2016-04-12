@@ -1,5 +1,6 @@
 package se.threegorillas.web;
 
+import se.threegorillas.exception.InvalidIssueException;
 import se.threegorillas.model.Issue;
 import se.threegorillas.model.WorkItem;
 import se.threegorillas.provider.WebWorkItem;
@@ -12,6 +13,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/workitem")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -31,20 +33,12 @@ public final class WorkItemService extends AbstractService {
     @GET
     public Response allWorkItems(@QueryParam("status") String status) {
         List<WorkItem> workItems = (List) service.getAllWorkItems();
-        Collection<WebWorkItem> webWorkItems = new ArrayList<>();
 
         if (null == status) {
 
-            for (WorkItem item : workItems) {
-                boolean hasIssue = item.getIssue() != null;
-                webWorkItems.add(
-                        new WebWorkItem.Builder(item.getId(), item.getDescription())
-                                .withAssignedUserName(item.getAssignedUsername())
-                                .withStatus(item.getStatus())
-                                .withIssue((hasIssue) ? item.getIssue().getIssueDescription() : null)
-                                .build()
-                );
-            }
+            Collection<WebWorkItem> webWorkItems = workItems.stream()
+                    .map(w -> toWebWorkItem(w))
+                    .collect(Collectors.toList());
 
             return Response.ok(webWorkItems).build();
         } else {
@@ -132,11 +126,11 @@ public final class WorkItemService extends AbstractService {
         WorkItem workItem = service.findWorkItemById(id);
 
         if (workItem == null) {
-            throw new WebApplicationException(404);
+            return Response.status(404).build();
         }
 
         if (workItem.getIssue() == null) {
-            throw new WebApplicationException(404);
+            return Response.status(404).build();
         }
 
         return Response.ok(workItem.getIssue().getIssueDescription()).build();
@@ -153,7 +147,7 @@ public final class WorkItemService extends AbstractService {
         WorkItem workItem1 = service.saveWorkItem(workItem);
 
         if (workItem1 == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            throw new InvalidIssueException("Could not save workitem with id: " + workItem1.getId() + ", invalid issue posted");
         }
 
         URI location = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "getOneWorkItem").build(workItem1.getId());

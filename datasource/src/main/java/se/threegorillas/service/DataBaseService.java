@@ -68,8 +68,8 @@ public class DataBaseService {
     }
 
     public WorkItem findWorkItemById(Long id) {
-
         WorkItem workItem = workItemRepository.findOne(id);
+
         if (workItem==null){
             throw  new EntityNotFoundException("WorkItem with id: " + id + " not found");
         }

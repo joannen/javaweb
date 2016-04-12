@@ -1,6 +1,5 @@
 package se.threegorillas.web;
 
-import se.threegorillas.exception.TeamNotFoundException;
 import se.threegorillas.model.Team;
 import se.threegorillas.model.User;
 import se.threegorillas.provider.WebTeam;
@@ -50,11 +49,7 @@ public final class TeamService extends AbstractService {
 
         Team team = service.findTeamById(id);
 
-        if(team == null){
-            throw new TeamNotFoundException(id);
-        }
-
-        WebTeam webTeam = new WebTeam(team.getId(), team.getTeamName(), team.getTeamStatus());
+        WebTeam webTeam = toWebTeam(team);
 
         return Response.ok(webTeam).build();
     }
@@ -95,14 +90,9 @@ public final class TeamService extends AbstractService {
 
         Team team = service.findTeamById(id);
 
-        if(team == null){
-            throw new TeamNotFoundException(id);
-        }
-
         service.removeTeam(id);
 
         return Response.noContent().build();
-
     }
 
     @POST
