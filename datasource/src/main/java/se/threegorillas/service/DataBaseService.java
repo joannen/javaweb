@@ -61,6 +61,10 @@ public class DataBaseService {
         return userRepository.findByUserNameOrLastNameOrFirstNameLike(addedWildCards);
     }
 
+    public Collection<User> findUsersByTeamId(Long id){
+        return userRepository.findByTeamId(id);
+    }
+
 
     //WorkItem
     public WorkItem saveWorkItem(WorkItem workItem) {
