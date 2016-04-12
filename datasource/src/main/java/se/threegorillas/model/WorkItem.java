@@ -31,6 +31,14 @@ public class WorkItem extends AbstractEntity {
        this.status = Status.UNSTARTED;
     }
 
+    public WorkItem(Long id, String description, String status){
+        this.id =id;
+        this.description = description;
+        this.status = status;
+    }
+
+
+
     public String getAssignedUsername() {
         return assignedUsername;
     }
@@ -72,6 +80,7 @@ public class WorkItem extends AbstractEntity {
     public void setIssue(Issue issue){
         this.issue = issue;
     }
+
 
     @Override
     public boolean equals(Object o) {

@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -99,7 +100,7 @@ public final class UserService {
 
         Collection<WebWorkItem> webWorkItems = u.getWorkItems().stream()
 
-                .map(w -> new WebWorkItem(w.getId(), w.getDescription(), w.getAssignedUsername()))
+                .map(w -> new WebWorkItem.Builder(w.getId(), w.getDescription()).withAssignedUserName(w.getAssignedUsername()).build())
 
 
                 .collect(Collectors.toList());
@@ -109,8 +110,8 @@ public final class UserService {
 
     @POST
     @Path("{id}/workitem")
-    public Response addWorkItemToUser(@PathParam("id") Long id, WebWorkItem webWorkItem) {
-        User u = service.findUserById(id);
+    public Response addWorkItemToUser(@PathParam("id") String userNumber, WebWorkItem webWorkItem) throws URISyntaxException {
+        User u = service.findUserByUserNumber(userNumber);
         WorkItem w;
         if (service.findWorkItemById(webWorkItem.getId()) != null) {
             w = service.findWorkItemById(webWorkItem.getId());
@@ -123,9 +124,14 @@ public final class UserService {
         service.saveWorkItem(w);
         service.saveUser(u);
 
-        URI location = uriInfo.getAbsolutePathBuilder().path(WorkItemService.class, "getOneWorkItem").build(w.getId());
+        String baseUri = uriInfo.getBaseUri().toString();
+        System.out.println(baseUri);
+        String location = baseUri +"workitem/"+ w.getId();
 
-        return Response.created(location).build();
+//        URI location = uriInfo.getAbsolutePathBuilder().path(WorkItemService.class, "getOneWorkItem").build(w.getId());
+        System.out.println(location);
+
+        return Response.created(new URI(location)).build();
 
 
     }

@@ -62,6 +62,8 @@ public class DataBaseService {
         return workItemRepository.findAll();
     }
 
+    public Collection<WorkItem> getWorkItemsByStatus(String status){ return workItemRepository.findByStatus(status);}
+
     public void deleteWorkItem(Long id) {
         workItemRepository.delete(id);
     }

@@ -2,8 +2,11 @@ package se.threegorillas.provider.webparser;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
+import se.threegorillas.provider.WebUser;
 import se.threegorillas.provider.WebWorkItem;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -15,9 +18,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 @Provider
-public final class ArrayListWorkItemProvider implements MessageBodyWriter<ArrayList<WebWorkItem>> {
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public final class ArrayListWorkItemProvider implements MessageBodyWriter<ArrayList<WebWorkItem>>, MessageBodyReader<ArrayList<WebWorkItem>> {
 
     private static final Gson gson = new GsonBuilder().registerTypeAdapter(Collection.class, new WebWorkItemAdapter()).create();
 
@@ -38,17 +44,32 @@ public final class ArrayListWorkItemProvider implements MessageBodyWriter<ArrayL
         }
     }
 
+    @Override
+    public boolean isReadable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
+        return aClass.isAssignableFrom(ArrayList.class);
+    }
+
+    @Override
+    public ArrayList<WebWorkItem> readFrom(Class<ArrayList<WebWorkItem>> aClass, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> multivaluedMap, InputStream inputStream) throws IOException, WebApplicationException {
+        return gson.fromJson(new InputStreamReader(inputStream), ArrayList.class);
+    }
+
 
     private final static class WebWorkItemAdapter implements JsonSerializer<ArrayList<WebWorkItem>>, JsonDeserializer<ArrayList<WebWorkItem>> {
 
         @Override
         public ArrayList<WebWorkItem> deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            JsonArray jArray = jsonElement.getAsJsonArray();
+            Iterator<JsonElement> iterator = jArray.iterator();
+            ArrayList<WebWorkItem> webUsers = new ArrayList<>();
 
-            JsonObject workItemJson = jsonElement.getAsJsonObject();
-            Long id = workItemJson.get("id").getAsLong();
-            String description = workItemJson.get("description").getAsString();
+            while (iterator.hasNext()){
+                JsonElement json = iterator.next();
+                WebWorkItem w = gson.fromJson(json, (Class<WebWorkItem>)type);
+                webUsers.add(w);
+            }
 
-            return null;
+            return webUsers;
         }
 
         /* how to serialize standard webworkitem object

@@ -9,6 +9,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +24,7 @@ public final class WorkItemService extends AbstractService {
     public Response sampleWorkItem() {
 
         Issue issue = new Issue("things are not done");
-        WebWorkItem webWorkItem = new WebWorkItem(1L, "do some things", "froanne", issue.getIssueDescription(), Status.UNSTARTED);
+        WebWorkItem webWorkItem = new WebWorkItem.Builder(1L, "do some things").withAssignedUserName("froanne").withIssue(issue.getIssueDescription()).withStatus(Status.UNSTARTED).build();
 
         return Response.ok(webWorkItem).build();
     }
@@ -30,28 +32,28 @@ public final class WorkItemService extends AbstractService {
     @GET
     public Response allWorkItems() {
         List<WorkItem> workItems = (List) service.getAllWorkItems();
+        Collection<WebWorkItem> webWorkItems = new ArrayList<>();
 
-        /* cast JpaWorkItems to WebWorkItems */
-        List<WebWorkItem> webWorkItems = workItems.stream()
-                .map(w -> new WebWorkItem(w.getId(), w.getDescription(), w.getAssignedUsername(), w.getStatus()))
-                .collect(Collectors.toList());
+        for (WorkItem item : workItems) {
+            webWorkItems.add(new WebWorkItem.Builder(item.getId(), item.getDescription()).build());
+        }
+//
+//        /* cast JpaWorkItems to WebWorkItems */
+//        List<WebWorkItem> webWorkItems = workItems.stream()
+//                .map(w -> new WebWorkItem(w.getId(), w.getDescription(), w.getAssignedUsername(), w.getStatus()))
+//                .collect(Collectors.toList());
 
         return Response.ok(webWorkItems).build();
     }
 
     @GET
     @Path("{id}")
-    public Response getOneWorkItem(@PathParam("id") Long id) {
+    public WebWorkItem getOneWorkItem(@PathParam("id") Long id) {
         WorkItem retrieved = service.findWorkItemById(id);
+        WebWorkItem webWorkItem;
 
-        if (retrieved == null) {
-            return Response.status(404).build();
-        }
+        return workItemToWebWorkItem(retrieved);
 
-        WebWorkItem webWorkItem = new WebWorkItem(retrieved.getId(), retrieved.getDescription(),
-                retrieved.getAssignedUsername(), retrieved.getStatus());
-
-        return Response.ok(webWorkItem).build();
     }
 
     @POST
@@ -69,24 +71,43 @@ public final class WorkItemService extends AbstractService {
     }
 
     @PUT
-    @Path("{id}")
-    public Response updateWorkItem(WebWorkItem webWorkItem) {
+    @Path("{id}/status")
+    public Response updateWorkItemStatus(@PathParam("id") Long id, String status) {
 
-        WorkItem workItem = new WorkItem(webWorkItem.getId(), webWorkItem.getDescription());
+        WorkItem item = service.findWorkItemById(id);
+        item.setStatus(status);
 
-        boolean exists = service.workItemExists(workItem);
+        WorkItem updated = service.saveWorkItem(item);
 
-        WorkItem saved = service.saveWorkItem(workItem);
+        return Response.ok().build();
 
-        if (exists) {
-            return Response.noContent().build();
-        } else {
-            URI location = uriInfo.getAbsolutePathBuilder()
-                    .path(WorkItemService.class, "getOneWorkItem")
-                    .build(saved.getId());
 
-            return Response.created(location).build();
-        }
+//        boolean exists = service.workItemExists(workItem);
+//
+//        WorkItem saved = service.saveWorkItem(workItem);
+//
+//        if (exists) {
+//            return Response.noContent().build();
+//        } else {
+//            URI location = uriInfo.getAbsolutePathBuilder()
+//                    .path(WorkItemService.class, "getOneWorkItem")
+//                    .build(saved.getId());
+//
+//            return Response.created(location).build();
+//        }
+    }
+//    @PUT
+//    @Path("{id}/status")
+//    public Response updateWorkItemStatus(@)
+
+    @GET
+    @Path("status")
+    public Collection<WebWorkItem> getWorkItemsByStatus(@QueryParam("status")String status){
+        Collection<WorkItem> workItems= service.getWorkItemsByStatus(status);
+        Collection<WebWorkItem> webWorkItems = new ArrayList<>();
+        workItems.forEach(w -> webWorkItems.add(workItemToWebWorkItem(w)));
+
+        return webWorkItems;
     }
 
     @DELETE
@@ -147,6 +168,25 @@ public final class WorkItemService extends AbstractService {
         URI location = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "getOneWorkItem").build();
 
         return Response.created(location).build();
+
+    }
+
+    private WebWorkItem workItemToWebWorkItem(WorkItem workItem){
+        WebWorkItem webWorkItem;
+        System.out.println("username: " + workItem.getAssignedUsername());
+        if (null == workItem.getAssignedUsername()) {
+            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
+                    withStatus(workItem.getStatus()).build();
+        } else if (null == workItem.getIssue()) {
+            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
+                    withAssignedUserName(workItem.getAssignedUsername()).withStatus(workItem.getStatus()).build();
+        } else {
+            webWorkItem = new WebWorkItem.Builder(workItem.getId(), workItem.getDescription()).
+                    withAssignedUserName(workItem.getAssignedUsername()).withStatus(workItem.getStatus())
+                    .withIssue(workItem.getIssue().getIssueDescription()).build();
+        }
+
+        return webWorkItem;
 
     }
 }

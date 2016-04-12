@@ -5,10 +5,14 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import se.threegorillas.model.WorkItem;
 
+import java.util.Collection;
+
 /**
  * Created by TheYellowBelliedMarmot on 2016-03-22.
  */
 
 @Repository
 public interface WorkItemRepository extends JpaRepository<WorkItem, Long> {
+
+    Collection<WorkItem> findByStatus(String status);
 }

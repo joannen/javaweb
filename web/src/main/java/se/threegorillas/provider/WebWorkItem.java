@@ -8,36 +8,14 @@ public final class WebWorkItem {
     private final String issueDescription;
     private final String status;
 
-    public WebWorkItem(Long id, String description, String assignedUsername, String issue, String status) {
-        this.id = id;
-        this.description = description;
-        this.assignedUsername = assignedUsername;
-        this.issueDescription = issue;
-        this.status = status;
-    }
 
-    public WebWorkItem(Long id, String description, String assignedUsername, String issue) {
-        this.id = id;
-        this.description = description;
-        this.assignedUsername = assignedUsername;
-        this.issueDescription = issue;
-        this.status = null;
-    }
-
-    public WebWorkItem(Long id, String description, String assignedUsername) {
-        this.id = id;
-        this.assignedUsername = assignedUsername;
-        this.description = description;
-        this.issueDescription = null;
-        this.status = null;
-    }
-
-    public WebWorkItem(Long id, String description){
-        this.id = id;
-        this.description = description;
-        this.assignedUsername = null;
-        this.issueDescription = null;
-        this.status = null;
+    public WebWorkItem(Builder builder){
+        this.id = builder.id;
+        this.description =builder.description;
+        this.assignedUsername = builder.assignedUserName;
+        this.issueDescription = builder.issue;
+        System.out.println(builder.status);
+        this.status =builder.status;
     }
 
     public String getAssignedUsername() {
@@ -59,4 +37,68 @@ public final class WebWorkItem {
     public String getStatus() {
         return status;
     }
+
+    @Override
+    public String toString() {
+        return "WebWorkItem{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", assignedUsername='" + assignedUsername + '\'' +
+                ", issueDescription='" + issueDescription + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WebWorkItem that = (WebWorkItem) o;
+
+        return !(description != null ? !description.equals(that.description) : that.description != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return description != null ? description.hashCode() : 0;
+    }
+
+
+    public static class Builder{
+        private final Long id;
+        private final String description;
+
+        private String assignedUserName = "No assigned user";
+        private String issue = "No issue";
+        private String status = "";
+
+        public Builder(Long id, String description){
+            this.id=id;
+            this.description = description;
+        }
+
+        public Builder withAssignedUserName(String assignedUserName){
+            this.assignedUserName=assignedUserName;
+            return this;
+        }
+
+        public Builder withIssue(String issue){
+            this.issue=issue;
+            return this;
+        }
+        public Builder withStatus(String status){
+            this.status = status;
+            return this;
+        }
+
+        public WebWorkItem build(){
+            return new WebWorkItem(this);
+        }
+    }
+
+
+
+
 }

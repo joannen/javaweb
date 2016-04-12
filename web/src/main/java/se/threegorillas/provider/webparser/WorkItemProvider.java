@@ -4,6 +4,8 @@ import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
 import se.threegorillas.provider.WebWorkItem;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -15,6 +17,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 @Provider
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public final class WorkItemProvider implements MessageBodyReader<WebWorkItem>, MessageBodyWriter<WebWorkItem> {
 
     private static final Gson gson = new GsonBuilder().registerTypeAdapter(WebWorkItem.class, new WebWorkItemAdapter()).create();
@@ -52,25 +56,33 @@ public final class WorkItemProvider implements MessageBodyReader<WebWorkItem>, M
         public WebWorkItem deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 
             JsonObject workItemJson = jsonElement.getAsJsonObject();
+
             Long id = workItemJson.get("id").getAsLong();
             String description = workItemJson.get("description").getAsString();
+//            String assignedUsername =workItemJson.get("assignedUsername").getAsString();
+//            String issue = workItemJson.get("issueDescription").getAsString();
+            String status = null;
+            if (workItemJson.has("status")){
+                status = workItemJson.get("status").getAsString();
+            }
 
-            return new WebWorkItem(id, description);
+
+            return new WebWorkItem.Builder(id, description).withStatus(status).build();
         }
 
 
         public JsonElement serialize(WebWorkItem webWorkItem, Type type, JsonSerializationContext jsonSerializationContext) {
             String issue = webWorkItem.getIssueDescription();
             JsonObject json = new JsonObject();
-            JsonObject issueJson = new JsonObject();
+//            JsonObject issueJson = new JsonObject();
 
-            issueJson.addProperty("description", issue);
+//            issueJson.addProperty("description", issue);
 
             json.addProperty("id", webWorkItem.getId());
             json.addProperty("description", webWorkItem.getDescription());
-            json.addProperty("assignedUser", webWorkItem.getAssignedUsername());
+            json.addProperty("assignedUsername", webWorkItem.getAssignedUsername());
             json.addProperty("status", webWorkItem.getStatus());
-            json.add("issue", issueJson);
+            json.addProperty("issueDescription", issue);
 
             return json;
         }

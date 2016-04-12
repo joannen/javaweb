@@ -3,8 +3,10 @@ package se.threegorillas.web;
 import org.junit.Before;
 import org.junit.Test;
 import se.threegorillas.provider.WebUser;
+import se.threegorillas.provider.WebWorkItem;
 import se.threegorillas.provider.webparser.ArrayListUserProvider;
 import se.threegorillas.provider.webparser.UserProvider;
+import se.threegorillas.provider.webparser.WorkItemProvider;
 
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
@@ -21,6 +23,7 @@ public class UserServiceTest {
 
     private final String userUrl = "http://localhost:8080/web/user";
     private final String teamUrl = "http://localhost:8080/web/team";
+    private final String workItemUrl = "http://localhost:8080/web/user";
     private Client client;
     private WebTarget sampleUser;
     private WebTarget postUser;
@@ -32,7 +35,7 @@ public class UserServiceTest {
 
     @Before
     public void setup() {
-        client = ClientBuilder.newClient().register(UserProvider.class).register(ArrayListUserProvider.class);
+        client = ClientBuilder.newClient().register(UserProvider.class).register(ArrayListUserProvider.class).register(WorkItemProvider.class);
         sampleUser = client.target(userUrl).path("sample");
         postUser = client.target(userUrl);
         userWithId = client.target(userUrl).path("{id}");
@@ -103,7 +106,19 @@ public class UserServiceTest {
         Collection<WebUser> webUsers = search.request().get(ArrayList.class);
         System.out.println(webUsers);
         assertTrue(webUsers.size() >0);
+    }
 
+    @Test
+    public void addWorkItemToUser(){
+        WebWorkItem webWorkItem = new WebWorkItem.Builder(1L, "fghjk").build();
+        WebUser userToSave = new WebUser(1L, "abc", "abc", "abc", "abc", "102200010004020009980");
+        URI location = postUser.request().post(Entity.entity(userToSave, MediaType.APPLICATION_JSON_TYPE)).getLocation();
+        WebTarget getUserWithId = client.target(location);
+        System.out.println(location);
+
+        WebTarget userWorkItem= client.target(location).path("workitem");
+        URI itemlocation = userWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getLocation();
+        System.out.println(itemlocation);
     }
 
 
