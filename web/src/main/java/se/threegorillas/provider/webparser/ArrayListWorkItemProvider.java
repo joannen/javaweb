@@ -72,16 +72,6 @@ public final class ArrayListWorkItemProvider implements MessageBodyWriter<ArrayL
             return webUsers;
         }
 
-        /* how to serialize standard webworkitem object
-        public JsonElement serialize(WebWorkItem webWorkItem, Type type, JsonSerializationContext jsonSerializationContext) {
-            JsonObject json = new JsonObject();
-
-            json.addProperty("id", webWorkItem.getId());
-            json.addProperty("description", webWorkItem.getDescription());
-
-            return json;
-        } */
-
         @Override
         public JsonElement serialize(ArrayList<WebWorkItem> webWorkItems, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject json = new JsonObject();

@@ -34,13 +34,12 @@ public final class WorkItemService extends AbstractService {
         Collection<WebWorkItem> webWorkItems = new ArrayList<>();
 
         for (WorkItem item : workItems) {
-            webWorkItems.add(new WebWorkItem.Builder(item.getId(), item.getDescription()).build());
+            webWorkItems.add(new WebWorkItem.Builder(item.getId(), item.getDescription())
+                    .withAssignedUserName(item.getAssignedUsername())
+                    .withStatus(item.getStatus())
+                    .withIssue((item.getIssue() == null) ? null : item.getIssue().getIssueDescription())
+                    .build());
         }
-//
-//        /* cast JpaWorkItems to WebWorkItems */
-//        List<WebWorkItem> webWorkItems = workItems.stream()
-//                .map(w -> new WebWorkItem(w.getId(), w.getDescription(), w.getAssignedUsername(), w.getStatus()))
-//                .collect(Collectors.toList());
 
         return Response.ok(webWorkItems).build();
     }
@@ -49,10 +48,8 @@ public final class WorkItemService extends AbstractService {
     @Path("{id}")
     public WebWorkItem getOneWorkItem(@PathParam("id") Long id) {
         WorkItem retrieved = service.findWorkItemById(id);
-        WebWorkItem webWorkItem;
 
         return toWebWorkItem(retrieved);
-
     }
 
     @POST
@@ -79,26 +76,8 @@ public final class WorkItemService extends AbstractService {
         WorkItem updated = service.saveWorkItem(item);
 
         return Response.ok().build();
-
-
-//        boolean exists = service.workItemExists(workItem);
-//
-//        WorkItem saved = service.saveWorkItem(workItem);
-//
-//        if (exists) {
-//            return Response.noContent().build();
-//        } else {
-//            URI location = uriInfo.getAbsolutePathBuilder()
-//                    .path(WorkItemService.class, "getOneWorkItem")
-//                    .build(saved.getId());
-//
-//            return Response.created(location).build();
-//        }
     }
-//    @PUT
-//    @Path("{id}/status")
-//    public Response updateWorkItemStatus(@)
-
+    
     @GET
     @Path("status")
     public Collection<WebWorkItem> getWorkItemsByStatus(@QueryParam("status")String status){

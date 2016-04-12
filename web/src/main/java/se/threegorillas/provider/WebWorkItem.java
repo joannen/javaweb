@@ -8,7 +8,6 @@ public final class WebWorkItem {
     private final String issueDescription;
     private final String status;
 
-
     public WebWorkItem(Builder builder){
         this.id = builder.id;
         this.description =builder.description;
@@ -71,6 +70,7 @@ public final class WebWorkItem {
         private final String description;
 
         private String assignedUserName = "No assigned user";
+//        private String assignedUserName = null;
         private String issue = "No issue";
         private String status = null;
 
