@@ -109,6 +109,17 @@ public final class WorkItemService extends AbstractService {
         return webWorkItems;
     }
 
+    @GET
+    @Path("/search")
+    public Collection<WebWorkItem> getWorkItemByDescription(@QueryParam("query") String query){
+        Collection<WorkItem> workItems = service.searchForWorkItemByDescription(query);
+        Collection<WebWorkItem> webWorkItems = new ArrayList<>();
+
+        workItems.forEach(w -> webWorkItems.add(toWebWorkItem(w)));
+
+        return webWorkItems;
+    }
+
     @DELETE
     @Path("{id}")
     public Response deleteWorkItem(@PathParam("id") Long id) {
