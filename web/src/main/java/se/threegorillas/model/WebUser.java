@@ -10,7 +10,6 @@ public final class WebUser {
     private final String userNumber;
     private final String status;
 
-
     public WebUser(Long id, String firstName, String lastName, String username, String password, String userNumber, String status) {
         this.id = id;
         this.firstName = firstName;

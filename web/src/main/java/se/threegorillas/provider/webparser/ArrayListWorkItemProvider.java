@@ -53,7 +53,6 @@ public final class ArrayListWorkItemProvider implements MessageBodyWriter<ArrayL
         return gson.fromJson(new InputStreamReader(inputStream), ArrayList.class);
     }
 
-
     private final static class WebWorkItemAdapter implements JsonSerializer<ArrayList<WebWorkItem>>, JsonDeserializer<ArrayList<WebWorkItem>> {
 
         @Override

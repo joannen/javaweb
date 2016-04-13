@@ -79,23 +79,12 @@ public class WorkItemServiceTest {
         WebWorkItem webWorkItem = new WebWorkItem.Builder(2L, "Mata hunden").build();
 
         URI location = postWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getLocation();
-
-        WebTarget getWorkItem = client.target(location);
         WebTarget postIssueToWorkItem = client.target(location).path("issue");
 
         Issue issue = new Issue("Joanne har ingen hund");
-        String updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issue.getIssueDescription(), MediaType.APPLICATION_JSON_TYPE)).readEntity(String.class);
+        int updatedWorkItem = postIssueToWorkItem.request().post(Entity.entity(issue.getIssueDescription(), MediaType.APPLICATION_JSON_TYPE)).getStatus();
 
-//        WebTarget addIssueToWorkItem = client.target(url).path("{id}/issue");
-//        Issue issue = new Issue("Joanne har ingen hund");
-//        WebWorkItem webWorkItem = new WebWorkItem.Builder(2L, "Mata hunden").build();
-//        URI location = postWorkItem.request().post(Entity.entity(webWorkItem, MediaType.APPLICATION_JSON_TYPE)).getLocation();
-//
-//        WebTarget getWorkItem = client.target(location);
-//        WebWorkItem retrievedWorkItem = getWorkItem.request().get(WebWorkItem.class);
-//        WebTarget getIssueForWorkItem = addIssueToWorkItem.resolveTemplate("id", retrievedWorkItem.getId());
-//
-//        String updatedWorkItem = getIssueForWorkItem.request().post(Entity.entity(issue.getIssueDescription(), MediaType.APPLICATION_JSON_TYPE)).readEntity(String.class);
+        assertTrue(updatedWorkItem == 201);
     }
 
     @Test

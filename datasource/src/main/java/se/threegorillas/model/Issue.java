@@ -38,4 +38,5 @@ public class Issue{
                 "issueDescription='" + issueDescription + '\'' +
                 '}';
     }
+
 }

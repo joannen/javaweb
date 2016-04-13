@@ -23,7 +23,6 @@ public final class UserProvider implements MessageBodyReader<WebUser>, MessageBo
 
     private static final Gson gson = new GsonBuilder().registerTypeAdapter(WebUser.class, new WebUserAdapter()).create();
 
-
     @Override
     public boolean isReadable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
         return aClass.isAssignableFrom(WebUser.class);

@@ -88,4 +88,5 @@ public class TeamServiceTest {
         Collection<WebUser> usersForTeam = getUsersForTeam.request().get(ArrayList.class);
         assertTrue(usersForTeam.size()>0);
     }
+
 }

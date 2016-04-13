@@ -27,7 +27,6 @@ public class TeamProvider implements MessageBodyReader<WebTeam>, MessageBodyWrit
 
     Gson gson = new GsonBuilder().registerTypeAdapter(WebTeam.class, new WebTeamAdapter()).create();
 
-
     @Override
     public boolean isReadable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
         return aClass.isAssignableFrom(WebTeam.class);

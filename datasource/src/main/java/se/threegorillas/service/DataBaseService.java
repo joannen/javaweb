@@ -116,7 +116,6 @@ public class DataBaseService {
         if (team.getUsers().size() > 0){
             throw new DeleteException("Can not delete Team with id: " + id );
         }
-
         teamRepository.delete(id);
     }
 

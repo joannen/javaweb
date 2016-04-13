@@ -91,8 +91,8 @@ public final class UserService extends AbstractService{
     }
 
     @POST
-    @Path("{id}/workitem")
-    public Response addWorkItemToUser(@PathParam("id") String userNumber, WebWorkItem webWorkItem) throws URISyntaxException {
+    @Path("{usernumber}/workitem")
+    public Response addWorkItemToUser(@PathParam("usernumber") String userNumber, WebWorkItem webWorkItem) throws URISyntaxException {
         User u = service.findUserByUserNumber(userNumber);
         WorkItem w;
 

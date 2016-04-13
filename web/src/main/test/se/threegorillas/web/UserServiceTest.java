@@ -34,15 +34,9 @@ public class UserServiceTest {
         client = ClientBuilder.newClient().register(UserProvider.class).register(ArrayListUserProvider.class).register(WorkItemProvider.class);
         sampleUser = client.target(userUrl).path("sample");
         postUser = client.target(userUrl);
-        userWithId = client.target(userUrl).path("{id}");
+        userWithId = client.target(userUrl).path("{usernumber}");
         searchForUsers= client.target(userUrl).path("search");
         searchForWorkItemByUser = client.target(userUrl).path("{usernumber}/workitem");
-    }
-
-    @Test
-    public void nullIsNotNull() {
-        // atleast one green bar
-        assertNull(null);
     }
 
     @Test
@@ -77,14 +71,14 @@ public class UserServiceTest {
         int updateStatus = getUserWithId.request().put(Entity.entity(updatedUser, MediaType.APPLICATION_JSON_TYPE)).getStatus();
         assertTrue(updateStatus == 204);
 
-        retrievedUser = userWithId.resolveTemplate("id", updatedUser.getUserNumber()).request().get(WebUser.class);
+        retrievedUser = userWithId.resolveTemplate("usernumber", updatedUser.getUserNumber()).request().get(WebUser.class);
 
         assertEquals(retrievedUser, updatedUser);
     }
 
     @Test
     public void shouldThrowExceptionWhenUserIsNotFound(){
-        int status =userWithId.resolveTemplate("id", 10).request().get().getStatus();
+        int status =userWithId.resolveTemplate("usernumber", 10).request().get().getStatus();
         assertEquals(status, 404);
     }
 
