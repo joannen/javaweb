@@ -68,7 +68,6 @@ public final class WorkItemService extends AbstractService {
         return Response.created(location).build();
     }
 
-    @PUT
     @Path("{id}/status")
     public Response updateWorkItemStatus(@PathParam("id") Long id, String status) {
 
@@ -80,7 +79,7 @@ public final class WorkItemService extends AbstractService {
         return Response.ok().build();
     }
 
-    public Collection<WebWorkItem> getWorkItemsByStatus(String status){
+    private Collection<WebWorkItem> getWorkItemsByStatus(String status){
         Collection<WorkItem> workItems= service.getWorkItemsByStatus(status);
         Collection<WebWorkItem> webWorkItems = new ArrayList<>();
         workItems.forEach(w -> webWorkItems.add(toWebWorkItem(w)));

@@ -79,8 +79,10 @@ public class WorkItemServiceTest {
         WebWorkItem retrieved = getWorkitem.request().get(WebWorkItem.class);
         assertTrue(retrieved.getStatus().equals(Status.UNSTARTED));
 
-        WebTarget getByStatus = client.target(url).path("status").queryParam("status");
+        WebTarget getByStatus = client.target(url).queryParam("status");
         Collection<WebWorkItem> itemsByStatus = getByStatus.queryParam("status", Status.UNSTARTED).request().get(ArrayList.class);
+
+        // detta är en LinkedTreeMap ifrån google Gson
         assertTrue(itemsByStatus.size() > 0);
     }
 
