@@ -68,6 +68,7 @@ public final class WorkItemService extends AbstractService {
         return Response.created(location).build();
     }
 
+    @PUT
     @Path("{id}/status")
     public Response updateWorkItemStatus(@PathParam("id") Long id, String status) {
 

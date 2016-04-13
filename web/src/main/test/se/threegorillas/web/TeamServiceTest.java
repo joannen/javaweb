@@ -1,6 +1,5 @@
 package se.threegorillas.web;
 
-import com.sun.deploy.util.SessionState;
 import org.junit.Before;
 import org.junit.Test;
 import se.threegorillas.provider.WebTeam;
@@ -18,7 +17,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by joanne on 07/04/16.
@@ -72,7 +72,6 @@ public class TeamServiceTest {
     @Test
     public void getAllTeams() {
         WebTarget getAllTeams = client.target(teamUrl);
-        System.out.println(getAllTeams.getUri());
         Collection<WebTeam> retrievedWebTeams = getAllTeams.request().get(ArrayList.class);
         assertTrue(retrievedWebTeams.size() > 1);
     }
